@@ -1,0 +1,40 @@
+#----------- ID HEADER -------------------------------------
+#  Author(s):	Andrew Boisvert
+#  Email(s):    andrewboisvert92@gmail.com
+#  File Name:   MAKEFILE
+#
+#  Program Purpose(s):
+#    To help determine what parts of the program need to be
+#    recompiled, and to aid in the process of doing so.
+#-----------------------------------------------------------
+
+#--------- Variable declarations ---------------------------
+# Targets and objects
+TARGET_A=main
+OBJECTS_A=main.o 
+
+# CC stuff
+CC=gcc
+CFLAGS=-g
+
+
+#--------- Building, Linking, Cleaning ---------------------
+# Building the target
+all: clean $(TARGET_A)
+
+targeta: clean $(TARGET_A)
+
+# Linking target executable from object files
+$(TARGET_A): $(OBJECTS_A)
+	$(CC) $(OBJECTS_A) -o $(TARGET_A)
+
+# Cleaning up the old object files and executable
+clean:
+	$(RM) *.o $(TARGET_A) $(TARGET_B) $(TARGET_C)
+
+
+#--------- Creating Object Files --------------------------- 
+main.o: main.c
+	$(CC) $(CFLAGS) -c main.c
+
+# The empty line above this comment must remain to avoid errors
