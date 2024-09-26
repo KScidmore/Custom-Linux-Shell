@@ -34,7 +34,8 @@ int main(){
         for(i = 0; tokens[i] != 0; i++){
             j = 0;
             while(tokens[i][j] != '\0'){
-                write(1, tokens[i][j], 1);
+                write(1, &tokens[i][j], 1);
+                j++;
             }
 
             write(1, "\n" , 1);
@@ -69,16 +70,17 @@ void tokenize(char *tokens[], char buffer[]){
             }
         }
 
-        if(start != 0){
-
-            tokens[tokenIndex++] = start;
-
-        }
-
-        tokens[tokenIndex] = 0;
+        i++;
 
     }
 
+    if(start != 0){
+
+        tokens[tokenIndex++] = start;
+
+    }
+
+    tokens[tokenIndex] = 0;
 
 }
 int stringComp(const char * str1,const char * str2){
