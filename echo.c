@@ -17,9 +17,8 @@ int main(){
 
     int i, j;
 
-    printf("made it");
-
     write(1, dollar, 2);
+
     while(1){
 
         bytesRead = read(0, buffer, 1024 - 1);
@@ -34,8 +33,8 @@ int main(){
 
         for(i = 0; tokens[i] != 0; i++){
             j = 0;
-            while(&tokens[i][j] != "\0"){
-                write(1, &tokens[i][j], 1);
+            while(tokens[i][j] != '\0'){
+                write(1, tokens[i][j], 1);
             }
 
             write(1, "\n" , 1);
@@ -51,9 +50,9 @@ void tokenize(char *tokens[], char buffer[]){
     int tokenIndex = 0;
     char *start = 0;
 
-    while(&buffer[i] != "\0"){
+    while(buffer[i] != '\0'){
 
-        if(&buffer[i] != " " && &buffer[i] != "\n"){
+        if(buffer[i] != ' ' && buffer[i] != '\n'){
 
             if(start == 0){
 
