@@ -1,44 +1,71 @@
-/*-------- FOR C LANGUAGE FILES ----------------------------------------------/*
+- want to discuss all this stuff with Kyle
 
-/*---------- ID HEADER -------------------------------------
-/  Author(s):   Andrew Boisvert, Kyle Scidmore
-/  Email(s):    abois526@mtroyal.ca, kscid125@mtroyal.ca
-/  File Name:   TODO
-/
-/  Program Purpose(s):
-/    TODO
-/---------------------------------------------------------*/
+- Pointers:
+    - naming:
+        - the pointer name begins with the letter p to distinguish it 
+    - declaration:
+        - note that these are all the same:
+            - int* pBar
+            - int * pBar 
+            - int *pBar 
+        - an asterisk must be in front of each pointer 
+            - int* p1, p2 does not declare 2 pointers 
+            - int *p1, *p2 declares 2 pointers 
+        - for these reasons, I think we should go with this convention:
+            - int *pBar 
+
+- Indentation Style:
+    - I personally like the One True Brace style (like K&R but excludes single-statement code blocks)
+    - e.g.
+        while (x ==y ) {
+            if (error) {
+                fix_error();
+            } else {
+                foo();
+                bar();
+            }
+        }
+
+- Naming Variables:
+    - camelCase or snake_case? 
+    - I don't have much preference, you?
+
+- one blank space between operators (excluding arrow operator to access members of structs):
+    - e.g. 
+        5 + 3 = 7
+    - exception:
+        p->member 
+- use parenthesis for clarity with order of operations 
+- access members of a structure with p->member rather than (*p).member 
+- lines must not exceed 80 characters 
+- no magic numbers 
+- 
+
+- Code Organization:
+    #include <>
+    #include ""
+    #defines
+    Data Types (e.g., structures)
+    Globals
+    Prototypes
+    Code (w/ main function first)
 
 
-/*---------- FUNCTION: TODO --------------------------------
-/  PURPOSE:
-/    TODO - purpose from the caller's perspective 
-/  
-/  CALLER INPUT:
-/    TODO - purpose of input parameters 
-/  
-/  CALLER OUTPUT:
-/    TODO - purpose of output parameters and return vals
-/  
-/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
-/
-/  CITATIONS:
-/    TODO - N/A or list them
-/---------------------------------------------------------*/
+- Interesting Ideas / Maybe?
+    - global variables should be avoided, but when used, prepend them with "g_", like g_foo
+    - adding comments to closing braces:
+        - helps when lots of nesting or lots going on 
+        - don't have to find the starting brace to know whats going on then 
+        - can help when else statements are sort of offset from the closing bracket of the if or elseif 
+    - 
+
+- 
 
 
-/*---------- STRUCTURE: TODO -------------------------------
-/  INFO:
-/    TODO - general explanation 
-/  
-/  ATTRIBUTES:
-/    TODO - list details about the attributes 
-/---------------------------------------------------------*/
+References
+==========
+- didn't just copy stuff, just looked around at different standards to get a feel of what was common and to note some interesting ideas that make code more readable at a glance, also influenced by our previous classes and their documentation standards, to find something we felt was both comprehensive and reasonably concise 
 
-
-
-
-/*-------- FOR ASSEMBLY FILES ------------------------------------------------/*
-
-TODO, need to check syntax for comments, then just edit the C file ones to work 
+- COMP 1631/1633/2655/2659 documentation standards documents 
+- https://www.cs.umd.edu/~nelson/classes/resources/cstyleguide/
+- https://users.ece.cmu.edu/~eno/coding/CCodingStandard.html
