@@ -1,5 +1,3 @@
-- want to discuss all this stuff with Kyle
-
 - Pointers:
     - naming:
         - the pointer name begins with the letter p to distinguish it 
@@ -15,7 +13,7 @@
             - int *pBar 
 
 - Indentation Style:
-    - I personally like the One True Brace style (like K&R but excludes single-statement code blocks)
+    - decided on One True Brace style (like K&R but excludes single-statement code blocks)
     - e.g.
         while (x ==y ) {
             if (error) {
@@ -27,8 +25,11 @@
         }
 
 - Naming Variables:
-    - camelCase or snake_case? 
-    - I don't have much preference, you?
+    - camelCase
+
+- Misc:
+    - lines must not exceed 80 characters 
+    - no magic numbers 
 
 - one blank space between operators (excluding arrow operator to access members of structs):
     - e.g. 
@@ -37,9 +38,6 @@
         p->member 
 - use parenthesis for clarity with order of operations 
 - access members of a structure with p->member rather than (*p).member 
-- lines must not exceed 80 characters 
-- no magic numbers 
-- 
 
 - Code Organization:
     #include <>
@@ -51,15 +49,23 @@
     Code (w/ main function first)
 
 
-- Interesting Ideas / Maybe?
-    - global variables should be avoided, but when used, prepend them with "g_", like g_foo
+- Interesting Ideas / Stuff to Discuss:
+    - global variables should be avoided, but when used, prepend them with a g?
     - adding comments to closing braces:
         - helps when lots of nesting or lots going on 
         - don't have to find the starting brace to know whats going on then 
         - can help when else statements are sort of offset from the closing bracket of the if or elseif 
+        - e.g.
+            while(1) {
+                if (valid) {
+                    //somecode 
+                } /* if valid */
+                else {
+                } /* not valid */
+                
+                } /* end forever */
     - 
 
-- 
 
 
 References
