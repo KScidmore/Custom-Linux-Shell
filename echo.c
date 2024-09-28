@@ -45,28 +45,29 @@ int main(){
     return 0;
 }
 
+/*Breaks buffer into command line arguments (tokens) based on whitespace*/
 void tokenize(char *tokens[], char buffer[]){
 
     int i = 0;
-    int tokenIndex = 0;
-    char *start = 0;
+    int tokenIndex = 0; /*tracks the index of next token to be placed in array*/
+    char *start = 0; /*Pointer For start of string being tokenized*/
 
-    while(buffer[i] != '\0'){
+    while(buffer[i] != '\0'){ /*Runs till end of buffer*/
 
-        if(buffer[i] != ' ' && buffer[i] != '\n'){
+        if(buffer[i] != ' ' && buffer[i] != '\n'){ /*checks for whitespace or carriage return*/
 
-            if(start == 0){
+            if(start == 0){ /*if start is Null */
 
-                start = &buffer[i];
+                start = &buffer[i]; /*Set start to point at the start of token to be copied*/
             }
         }
-        else{
+        else{ /*Else whitespace IS found*/
 
-            if(start != 0){
+            if(start != 0){ /*If start already points to a token to be copied*/
 
-                buffer[i] = '\0';
-                tokens[tokenIndex++] = start;
-                start = 0;
+                buffer[i] = '\0'; /*Null terminate token*/
+                tokens[tokenIndex++] = start; /*set tokens at specified index to point at start of token*/
+                start = 0; /* reset start*/
             }
         }
 
@@ -74,13 +75,13 @@ void tokenize(char *tokens[], char buffer[]){
 
     }
 
-    if(start != 0){
+    if(start != 0){ /*Check to make sure all tokens were accounted for*/
 
-        tokens[tokenIndex++] = start;
+        tokens[tokenIndex++] = start; 
 
     }
 
-    tokens[tokenIndex] = 0;
+    tokens[tokenIndex] = 0; /*Null terminate token array*/
 
 }
 int stringComp(const char * str1,const char * str2){
