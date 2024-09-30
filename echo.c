@@ -186,3 +186,49 @@ char *alloc(unsigned int size) {
 void free_all() {
     p_heap = heap;
 }
+
+/*---------- FUNCTION: get_command -------------------------
+/  PURPOSE:
+/    Prompts the user to enter a command line, then reads a
+/    command line into a buffer, handling cases such as command
+/    lines that are too long. The function then calls free_all()
+/    to reset the heap, tokenizes the command line, and populates 
+/    the command structure's attributes. 
+/  
+/  CALLER INPUT:
+/    TODO - purpose of input parameters 
+/  
+/  CALLER OUTPUT:
+/    TODO - purpose of output parameters and return vals
+/  
+/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
+/    TODO - N/A or list them 
+/
+/  CITATIONS:
+/    TODO - N/A or list them
+/---------------------------------------------------------*/
+void get_command() {
+    /* TODO */
+}
+
+/*---------- FUNCTION: run_command -------------------------
+/  PURPOSE:
+/    Processes the given command by attempting to spawn a
+/    corresponding child process, making use of the fork,
+/    execve, and waitpid system calls. 
+/  
+/  CALLER INPUT:
+/    TODO - purpose of input parameters 
+/  
+/  CALLER OUTPUT:
+/    TODO - purpose of output parameters and return vals
+/  
+/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
+/    TODO - N/A or list them 
+/
+/  CITATIONS:
+/    TODO - N/A or list them
+/---------------------------------------------------------*/
+void run_command() {
+    /* TODO */
+}
