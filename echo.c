@@ -45,6 +45,8 @@ void tokenize(char *tokens[], char buffer[]);
 /* CODE, STARTING WITH MAIN */
 int main(){
 
+    Command command; 
+
     const char *dollar = "$ ";
     char buffer[BUFFER_SIZE];
     char *tokens[MAX_TOKENS];
@@ -208,7 +210,21 @@ void free_all() {
 /    TODO - N/A or list them
 /---------------------------------------------------------*/
 void get_command() {
-    /* TODO */
+    const char *dollar = "$ ";
+    char heap[BUFFER_SIZE];
+    ssize_t bytesRead;
+    write(1, dollar, 2);
+
+    bytesRead = read(0, heap, HEAP_SIZE - 1);
+    heap[bytesRead] = '\0';
+
+    free_all();
+
+    tokenize(command->argv, heap);
+
+    /* might need to edit, want you to check it out */
+
+
 }
 
 /*---------- FUNCTION: run_command -------------------------
