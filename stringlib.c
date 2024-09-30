@@ -1,3 +1,11 @@
+/*---------- ID HEADER -------------------------------------
+/  Author(s):   Andrew Boisvert, Kyle Scidmore
+/  Email(s):    abois526@mtroyal.ca, kscid125@mtroyal.ca
+/  File Name:   stringlib.c
+/
+/  Program Purpose(s):
+/    TODO
+/---------------------------------------------------------*/
 
 #include <stringlib.h>
 

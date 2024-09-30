@@ -1,14 +1,51 @@
+/*---------- ID HEADER -------------------------------------
+/  Author(s):   Andrew Boisvert, Kyle Scidmore
+/  Email(s):    abois526@mtroyal.ca, kscid125@mtroyal.ca
+/  File Name:   echo.c
+/
+/  Program Purpose(s):
+/    TODO
+/---------------------------------------------------------*/
+
+/* INCLUDES (<> then "") */
 #include <unistd.h>
 #include <fcntl.h>
-#include  <stdio.h>
+#include <stdio.h>
+#include "stringlib.h"
 
+/* DEFINES */
 #define BUFFER_SIZE 1024
 #define MAX_TOKENS 256
+#define HEAP_SIZE 1024
+#define MAX_ARGS 12 /* can change this as we see fit */
 
+/* DATA TYPES (STRUCTS, ETC) */
+/*---------- STRUCTURE: Command ----------------------------
+/  INFO:
+/    Data structure for representing Linux commands.
+/  
+/  ATTRIBUTES:
+/    char *argv - an array of pointers to dyn-alloc'ed strings
+/    unsigned int argc - argument count (the size of the array)
+/---------------------------------------------------------*/
+typedef struct {
+    char *argv[MAX_ARGS+1];
+    unsigned int argc;
+    /* it is noted that we may need to add more here, later */
+} Command;
+
+/* GLOBALS */
+char heap[HEAP_SIZE];
+char *p_heap = heap;
+
+/* FUNCTION PROTOTYPES */
 int stringComp(const char *str1, const char *str2);
 void tokenize(char *tokens[], char buffer[]);
 
+/* CODE, STARTING WITH MAIN */
 int main(){
+
+    Command command; 
 
     const char *dollar = "$ ";
     char buffer[BUFFER_SIZE];
@@ -104,3 +141,110 @@ int stringComp(const char * str1,const char * str2){
     
 }
 
+
+/*---------- FUNCTION: *alloc ------------------------------
+/  PURPOSE:
+/    Returns a pointer to a chunk of the given size. 
+/  
+/  CALLER INPUT:
+/    size - the given size to be assigned 
+/  
+/  CALLER OUTPUT:
+/    TODO - purpose of output parameters and return vals
+/  
+/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
+/    TODO - N/A or list them 
+/
+/  CITATIONS:
+/    TODO - N/A or list them
+/---------------------------------------------------------*/
+char *alloc(unsigned int size) {
+    if (p_heap + size <= HEAP_SIZE) {
+        char *temp = p_heap;
+        p_heap += size;
+        return temp;
+    }
+    else {
+        return NULL; /* error if memory runs out, but shouldn't reach this*/
+    }
+}
+
+/*---------- FUNCTION: free_all ----------------------------
+/  PURPOSE:
+/    Returns all previously allocated memory to the heap.
+/  
+/  CALLER INPUT:
+/    N/A
+/  
+/  CALLER OUTPUT:
+/    N/A
+/  
+/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
+/    N/A
+/
+/  CITATIONS:
+/    N/A
+/---------------------------------------------------------*/
+void free_all() {
+    p_heap = heap;
+}
+
+/*---------- FUNCTION: get_command -------------------------
+/  PURPOSE:
+/    Prompts the user to enter a command line, then reads a
+/    command line into a buffer, handling cases such as command
+/    lines that are too long. The function then calls free_all()
+/    to reset the heap, tokenizes the command line, and populates 
+/    the command structure's attributes. 
+/  
+/  CALLER INPUT:
+/    TODO - purpose of input parameters 
+/  
+/  CALLER OUTPUT:
+/    TODO - purpose of output parameters and return vals
+/  
+/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
+/    TODO - N/A or list them 
+/
+/  CITATIONS:
+/    TODO - N/A or list them
+/---------------------------------------------------------*/
+void get_command() {
+    const char *dollar = "$ ";
+    char heap[BUFFER_SIZE];
+    ssize_t bytesRead;
+    write(1, dollar, 2);
+
+    bytesRead = read(0, heap, HEAP_SIZE - 1);
+    heap[bytesRead] = '\0';
+
+    free_all();
+
+    tokenize(command->argv, heap);
+
+    /* might need to edit, want you to check it out */
+
+
+}
+
+/*---------- FUNCTION: run_command -------------------------
+/  PURPOSE:
+/    Processes the given command by attempting to spawn a
+/    corresponding child process, making use of the fork,
+/    execve, and waitpid system calls. 
+/  
+/  CALLER INPUT:
+/    TODO - purpose of input parameters 
+/  
+/  CALLER OUTPUT:
+/    TODO - purpose of output parameters and return vals
+/  
+/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
+/    TODO - N/A or list them 
+/
+/  CITATIONS:
+/    TODO - N/A or list them
+/---------------------------------------------------------*/
+void run_command() {
+    /* TODO */
+}
