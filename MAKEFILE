@@ -1,6 +1,6 @@
 #----------- ID HEADER -------------------------------------
-#  Author(s):	Andrew Boisvert
-#  Email(s):    andrewboisvert92@gmail.com
+#  Author(s):	Andrew Boisvert, Kyle Scidmore
+#  Email(s):    abois526@mtroyal.ca, kscid125@mtroyal.cas
 #  File Name:   MAKEFILE
 #
 #  Program Purpose(s):
