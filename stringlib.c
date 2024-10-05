@@ -7,8 +7,7 @@
 /    TODO
 /---------------------------------------------------------*/
 
-#include <stringlib.h>
-
+#include "stringlib.h"
 
 /*---------- FUNCTION: string_comp --------------------------------
 /  PURPOSE:
