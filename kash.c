@@ -1,13 +1,13 @@
-/*---------- ID HEADER -------------------------------------
-/  Author(s):   Andrew Boisvert, Kyle Scidmore
-/  Email(s):    abois526@mtroyal.ca, kscid125@mtroyal.ca
-/  File Name:   kash.c
+/*---------- id header -------------------------------------
+/  author(s):   andrew boisvert, kyle scidmore
+/  email(s):    abois526@mtroyal.ca, kscid125@mtroyal.ca
+/  file name:   kash.c
 /
-/  Program Purpose(s):
-/    TODO
+/  program purpose(s):
+/    todo
 /---------------------------------------------------------*/
 
-/* INCLUDES (<> then "") */
+/* includes (<> then "") */
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -15,41 +15,41 @@
 #include <sys/wait.h>
 #include "stringlib.h"
 
-/* DEFINES */
-#define HEAP_SIZE 4096 /* 4KB of memory */
-#define MAX_ARGS 256 
-#define BUFFER_SIZE 1024
-/* DATA TYPES (STRUCTS, ETC) */
-/*---------- STRUCTURE: Command ----------------------------
-/  INFO:
-/    Data structure for representing Linux commands.
+/* defines */
+#define heap_size 4096 /* 4kb of memory */
+#define max_args 256 
+#define buffer_size 1024
+/* data types (structs, etc) */
+/*---------- structure: command ----------------------------
+/  info:
+/    data structure for representing linux commands.
 /  
-/  ATTRIBUTES:
+/  attributes:
 /    char *argv - an array of pointers to dyn-alloc'ed strings
 /    unsigned int argc - argument count (the size of the array)
 /---------------------------------------------------------*/
 typedef struct {
-    char *argv[MAX_ARGS+1];
+    char *argv[max_args+1];
     unsigned int argc;
     /* it is noted that we may need to add more here, later */
-} Command;
+} command;
 
 
-/* GLOBALS */
-char heap[HEAP_SIZE];
+/* globals */
+char heap[heap_size];
 char *p_free_heap = heap;
 
-/* FUNCTION PROTOTYPES */
-int stringComp(const char *str1, const char *str2);
+/* function prototypes */
+int string_comp(const char *str1, const char *str2);
 void tokenize(char *tokens[], char buffer[]);
 char *alloc(unsigned int size);
 void free_all();
-void get_command(Command *command);
-void run_command(Command *command);
+void get_command(command *command);
+void run_command(command *command);
 
 int main(){
 
-    Command command;
+    command command;
 
     get_command(&command);
 
@@ -65,28 +65,28 @@ int main(){
 }
 
 
-/*Breaks buffer into command line arguments (tokens) based on whitespace*/
+/*breaks buffer into command line arguments (tokens) based on whitespace*/
 void tokenize(char *tokens[], char buffer[]){
 
     int i = 0;
-    int tokenIndex = 0; /*tracks the index of next token to be placed in array*/
-    char *start = 0; /*Pointer For start of string being tokenized*/
+    int token_index = 0; /*tracks the index of next token to be placed in array*/
+    char *start = 0; /*pointer for start of string being tokenized*/
 
-    while(buffer[i] != '\0'){ /*Runs till end of buffer*/
+    while(buffer[i] != '\0'){ /*runs till end of buffer*/
 
         if(buffer[i] != ' ' && buffer[i] != '\n'){ /*checks for whitespace or carriage return*/
 
-            if(start == 0){ /*if start is Null */
+            if(start == 0){ /*if start is null */
 
-                start = &buffer[i]; /*Set start to point at the start of token to be copied*/
+                start = &buffer[i]; /*set start to point at the start of token to be copied*/
             }
         }
-        else{ /*Else whitespace IS found*/
+        else{ /*else whitespace is found*/
 
-            if(start != 0){ /*If start already points to a token to be copied*/
+            if(start != 0){ /*if start already points to a token to be copied*/
 
-                buffer[i] = '\0'; /*Null terminate token*/
-                tokens[tokenIndex++] = start; /*set tokens at specified index to point at start of token*/
+                buffer[i] = '\0'; /*null terminate token*/
+                tokens[token_index++] = start; /*set tokens at specified index to point at start of token*/
                 start = 0; /* reset start*/
             }
         }
@@ -95,24 +95,24 @@ void tokenize(char *tokens[], char buffer[]){
 
     }
 
-    if(start != 0){ /*Check to make sure all tokens were accounted for*/
+    if(start != 0){ /*check to make sure all tokens were accounted for*/
 
-        tokens[tokenIndex++] = start; 
+        tokens[token_index++] = start; 
 
     }
 
-    tokens[tokenIndex] = 0; /*Null terminate token array*/
+    tokens[token_index] = 0; /*null terminate token array*/
 
 }
 
 char *alloc(unsigned int size) {
-    if (p_free_heap + size <= HEAP_SIZE) {
+    if (p_free_heap + size <= heap_size) {
         char *p_alloced = p_free_heap;
         p_free_heap += size;
         return p_alloced;
     }
     else {
-        return NULL; /* error if memory runs out, but shouldn't reach this*/
+        return null; /* error if memory runs out, but shouldn't reach this*/
     }
 }
 
@@ -120,7 +120,7 @@ void free_all() {
     p_free_heap = heap;
 }
 
-void get_command(struct Command *command) {
+void get_command(struct command *command) {
 
     const char *p_dollar = "$ ";
     ssize_t bytes_read;
@@ -128,19 +128,19 @@ void get_command(struct Command *command) {
 
     write(2, p_dollar, 2);
 
-    p_buffer = alloc(BUFFER_SIZE);
-    if (p_buffer == NULL) {
-        write(1, "Memory allocation failure!\n", 27);
+    p_buffer = alloc(buffer_size);
+    if (p_buffer == null) {
+        write(1, "memory allocation failure!\n", 27);
         return;
     }
 
-    bytes_read = read(0, p_buffer, BUFFER_SIZE - 1);
+    bytes_read = read(0, p_buffer, buffer_size - 1);
     if(bytes_read > 0){
         p_buffer[bytes_read] = '\0'; /* same as *(p_buffer + bytes_read) */
     }
     else {
 
-        write(2, "Failed to read input!\n");
+        write(2, "failed to read input!\n");
         return;
     }
 
@@ -151,11 +151,11 @@ void get_command(struct Command *command) {
 
 }
 
-void run_command(Command *command) {
+void run_command(command *command) {
 
     pid_t pid;
     int status;
-    char * const newenvp[] = {NULL};
+    char * const newenvp[] = {null};
     pid = fork();
 
     if(pid == 0){
@@ -170,7 +170,7 @@ void run_command(Command *command) {
 
     
 
-int stringComp(const char * str1,const char * str2){
+int string_comp(const char * str1,const char * str2){
 
     while(*str1 && *str2){
 
