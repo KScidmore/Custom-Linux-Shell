@@ -106,10 +106,10 @@ void tokenize(char *tokens[], char buffer[]){
 }
 
 char *alloc(unsigned int size) {
-    // Calculate the new pointer after allocation
+    /*Calculate the new pointer after allocation*/
     char *new_free_heap = p_free_heap + size;
     
-    // Check if the new pointer would exceed the allocated heap size
+    /*Check if the new pointer would exceed the allocated heap size*/
     if (new_free_heap <= (p_free_heap + heap_size)) {
         char *p_alloced = p_free_heap;
         p_free_heap = new_free_heap;
