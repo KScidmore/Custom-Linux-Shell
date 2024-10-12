@@ -32,7 +32,7 @@ typedef struct {
     char *argv[max_args+1];
     unsigned int argc;
     /* it is noted that we may need to add more here, later */
-} command;
+} Command;
 
 
 /* globals */
@@ -44,12 +44,12 @@ int string_comp(const char *str1, const char *str2);
 void tokenize(char *tokens[], char buffer[]);
 char *alloc(unsigned int size);
 void free_all();
-void get_command(command *command);
-void run_command(command *command);
+void get_command(Command *command);
+void run_command(Command *command);
 
 int main(){
 
-    command command;
+    Command command;
 
     get_command(&command);
 
@@ -106,13 +106,16 @@ void tokenize(char *tokens[], char buffer[]){
 }
 
 char *alloc(unsigned int size) {
-    if (p_free_heap + size <= heap_size) {
+    // Calculate the new pointer after allocation
+    char *new_free_heap = p_free_heap + size;
+    
+    // Check if the new pointer would exceed the allocated heap size
+    if (new_free_heap <= (p_free_heap + heap_size)) {
         char *p_alloced = p_free_heap;
-        p_free_heap += size;
+        p_free_heap = new_free_heap;
         return p_alloced;
-    }
-    else {
-        return null; /* error if memory runs out, but shouldn't reach this*/
+    } else {
+        return NULL; /* error if memory runs out, but shouldn't reach this */
     }
 }
 
@@ -120,7 +123,7 @@ void free_all() {
     p_free_heap = heap;
 }
 
-void get_command(struct command *command) {
+void get_command(Command *command) {
 
     const char *p_dollar = "$ ";
     ssize_t bytes_read;
@@ -129,7 +132,7 @@ void get_command(struct command *command) {
     write(2, p_dollar, 2);
 
     p_buffer = alloc(buffer_size);
-    if (p_buffer == null) {
+    if (p_buffer == NULL) {
         write(1, "memory allocation failure!\n", 27);
         return;
     }
@@ -140,7 +143,7 @@ void get_command(struct command *command) {
     }
     else {
 
-        write(2, "failed to read input!\n");
+        write(2, "failed to read input!\n", 22);
         return;
     }
 
@@ -151,11 +154,11 @@ void get_command(struct command *command) {
 
 }
 
-void run_command(command *command) {
+void run_command(Command *command) {
 
     pid_t pid;
     int status;
-    char * const newenvp[] = {null};
+    char * const newenvp[] = {NULL};
     pid = fork();
 
     if(pid == 0){
