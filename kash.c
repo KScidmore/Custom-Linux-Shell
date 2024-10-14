@@ -53,10 +53,22 @@ int main(){
 
     get_command(&command);
 
+    if(string_comp(command.argv[0], "exit") == 1){
+
+        return 0;
+
+    }
+
     while(1){
 
         run_command(&command);
         get_command(&command);
+
+        if(string_comp(command.argv[0], "exit") == 1){
+
+            break;
+
+        }
         
     }
 
