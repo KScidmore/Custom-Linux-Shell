@@ -19,6 +19,7 @@
 #define heap_size 4096 /* 4kb of memory */
 #define max_args 256 
 #define buffer_size 1024
+#define MAX_PIPELINE_LENGTH 2
 /* data types (structs, etc) */
 /*---------- structure: command ----------------------------
 /  info:
@@ -34,6 +35,21 @@ typedef struct {
     /* it is noted that we may need to add more here, later */
 } Command;
 
+/*---------- structure: command ----------------------------
+/  info:
+/    data structure for representing a job.
+/  
+/  attributes:
+/
+/---------------------------------------------------------*/
+typedef struct {
+    Command command pipeline[MAX_PIPELINE_LENGTH];
+    unsigned int num_stages;
+    char *outfile_path;   /*NULL for no output redirection*/
+    char *infile_path;    /*NULL for no input redirection*/
+    int background;       /*0=foreground, not zero=background*/
+
+} Job;
 
 /* globals */
 char heap[heap_size];
