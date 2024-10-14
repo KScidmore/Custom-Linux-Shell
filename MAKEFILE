@@ -10,8 +10,8 @@
 
 #--------- Variable declarations ---------------------------
 # Targets and objects
-TARGET_A=main
-OBJECTS_A=main.o 
+TARGET=kash
+OBJECTS=kash.o stringlib.o 
 
 # CC stuff
 CC=gcc
@@ -20,21 +20,22 @@ CFLAGS=-g
 
 #--------- Building, Linking, Cleaning ---------------------
 # Building the target
-all: clean $(TARGET_A)
-
-targeta: clean $(TARGET_A)
+all: clean $(TARGET)
 
 # Linking target executable from object files
-$(TARGET_A): $(OBJECTS_A)
-	$(CC) $(OBJECTS_A) -o $(TARGET_A)
+$(TARGET): $(OBJECTS)
+	$(CC) $(OBJECTS) -o $(TARGET)
 
 # Cleaning up the old object files and executable
 clean:
-	$(RM) *.o $(TARGET_A) $(TARGET_B) $(TARGET_C)
+	$(RM) *.o $(TARGET)
 
 
 #--------- Creating Object Files --------------------------- 
-main.o: main.c
-	$(CC) $(CFLAGS) -c main.c
+kash.o: kash.c
+	$(CC) $(CFLAGS) -c kash.c 
+
+stringlib.o: stringlib.c stringlib.h 
+	$(CC) $(CFLAGS) -c stringlib.c 
 
 # The empty line above this comment must remain to avoid errors

@@ -121,6 +121,7 @@ void tokenize(char *tokens[], char buffer[]){
     tokens[tokenIndex] = 0; /*Null terminate token array*/
 
 }
+
 int stringComp(const char * str1,const char * str2){
 
     while(*str1 && *str2){
