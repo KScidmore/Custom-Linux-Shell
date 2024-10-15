@@ -1,0 +1,27 @@
+
+- piping:
+    - closing write end at end of parent and closing write end are DIFFERENT OPERATIONS, don't mix this up
+        - without parent closing, read() might block indefinitely 
+        - child closes its own copy of the write endpoint because it doesn't need to write to the pipe 
+
+- for kyle:
+    - reviewed lab to make sense of everything, feel alls clear now 
+    - fixed some error handling in pipes.c and kash.c, might have not covered it all, though 
+    - started working on implementation of get and run job functions 
+        - think we needed to fix tokenizer to handle different delimiters and I think this should fix it
+        - need to interate through buffer of the tokens and handle different delimiters in different ways, shouldn't be too bad 
+        - got up to this point and started fading out, going to return to this tomorrow unless I get a second wind 
+    - tried to document what it seems next steps are, don't take it as gospel but I think it's covers most stuff haha 
+
+- TODO (ordered list):
+    - need to fix string tokenizer to split by delimiters 
+    - finish implementing get_job
+        - splits based on |, >, <, & and adds to job attributes, handling different actions these operators do 
+    - finish implementing run_job
+        - handle redirection 
+        - add 2-stage piping support and background support 
+
+- TODO (unordered list):
+    - catch up on documentation 
+    - organize structs, functions, etc into seperate .c and .h files 
+    - determine if p_foo style makes sense, decide to keep it or nix it

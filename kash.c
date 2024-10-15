@@ -16,10 +16,11 @@
 #include "stringlib.h"
 
 /* defines */
-#define heap_size 4096 /* 4kb of memory */
-#define max_args 256 
-#define buffer_size 1024
+#define HEAP_SIZE 4096 /* 4kb of memory */
+#define MAX_ARGS 256 
+#define BUFFER_SIZE 1024
 #define MAX_PIPELINE_LENGTH 2
+
 /* data types (structs, etc) */
 /*---------- structure: command ----------------------------
 /  info:
@@ -30,7 +31,7 @@
 /    unsigned int argc - argument count (the size of the array)
 /---------------------------------------------------------*/
 typedef struct {
-    char *argv[max_args+1];
+    char *argv[MAX_ARGS+1];
     unsigned int argc;
     /* it is noted that we may need to add more here, later */
 } Command;
@@ -40,19 +41,27 @@ typedef struct {
 /    data structure for representing a job.
 /  
 /  attributes:
-/
+/    Command pipeline[MAX_PIPELINE_LENGTH];
+/      TODO
+/    unsigned int num_stages;
+/      TODO - also expand upon below 
+/    char *outfile_path;   
+/      NULL for no output redirection
+/    char *infile_path;    
+/      NULL for no input redirection
+/    int background;       
+/      0 = foreground, !0 = background
 /---------------------------------------------------------*/
 typedef struct {
-    Command command pipeline[MAX_PIPELINE_LENGTH];
+    Command pipeline[MAX_PIPELINE_LENGTH];
     unsigned int num_stages;
-    char *outfile_path;   /*NULL for no output redirection*/
-    char *infile_path;    /*NULL for no input redirection*/
-    int background;       /*0=foreground, not zero=background*/
-
+    char *outfile_path;
+    char *infile_path;
+    int background;
 } Job;
 
 /* globals */
-char heap[heap_size];
+char heap[HEAP_SIZE];
 char *p_free_heap = heap;
 
 /* function prototypes */
@@ -62,56 +71,54 @@ char *alloc(unsigned int size);
 void free_all();
 void get_command(Command *command);
 void run_command(Command *command);
+void get_job(Command *command);
+void run_job(Command *command);
+void init_job(Job *job);
+char *mystrtok(char *tokens[], char buffer[], const char *delimiters);
 
-int main(){
+int main() {
 
     Command command;
+    Job job;
 
-    get_command(&command);
+    get_job(&command);
 
-    if(string_comp(command.argv[0], "exit") == 1){
-
+    if (string_comp(command.argv[0], "exit") == 1) {
         return 0;
-
     }
 
-    while(1){
-
-        run_command(&command);
-        get_command(&command);
+    while (1) {
+        run_job(&command);
+        get_job(&command);
 
         if(string_comp(command.argv[0], "exit") == 1){
-
             break;
-
         }
-        
     }
-
 
     return 0;
 }
 
 
 /*breaks buffer into command line arguments (tokens) based on whitespace*/
-void tokenize(char *tokens[], char buffer[]){
+void tokenize(char *tokens[], char buffer[]) {
 
     int i = 0;
     int token_index = 0; /*tracks the index of next token to be placed in array*/
     char *start = 0; /*pointer for start of string being tokenized*/
 
-    while(buffer[i] != '\0'){ /*runs till end of buffer*/
+    while (buffer[i] != '\0') { /*runs till end of buffer*/
 
-        if(buffer[i] != ' ' && buffer[i] != '\n'){ /*checks for whitespace or carriage return*/
+        if (buffer[i] != ' ' && buffer[i] != '\n') { /*checks for whitespace or carriage return*/
 
-            if(start == 0){ /*if start is null */
+            if (start == 0) { /*if start is null */
 
                 start = &buffer[i]; /*set start to point at the start of token to be copied*/
             }
         }
-        else{ /*else whitespace is found*/
+        else { /*else whitespace is found*/
 
-            if(start != 0){ /*if start already points to a token to be copied*/
+            if (start != 0) { /*if start already points to a token to be copied*/
 
                 buffer[i] = '\0'; /*null terminate token*/
                 tokens[token_index++] = start; /*set tokens at specified index to point at start of token*/
@@ -123,7 +130,7 @@ void tokenize(char *tokens[], char buffer[]){
 
     }
 
-    if(start != 0){ /*check to make sure all tokens were accounted for*/
+    if (start != 0) { /*check to make sure all tokens were accounted for*/
 
         tokens[token_index++] = start; 
 
@@ -138,7 +145,7 @@ char *alloc(unsigned int size) {
     char *new_free_heap = p_free_heap + size;
     
     /*Check if the new pointer would exceed the allocated heap size*/
-    if (new_free_heap <= (p_free_heap + heap_size)) {
+    if (new_free_heap <= (p_free_heap + HEAP_SIZE)) {
         char *p_alloced = p_free_heap;
         p_free_heap = new_free_heap;
         return p_alloced;
@@ -166,7 +173,7 @@ void get_command(Command *command) {
     }
 
     bytes_read = read(0, p_buffer, buffer_size - 1);
-    if(bytes_read > 0){
+    if (bytes_read > 0) {
         p_buffer[bytes_read] = '\0'; /* same as *(p_buffer + bytes_read) */
     }
     else {
@@ -178,8 +185,6 @@ void get_command(Command *command) {
     free_all();
 
     tokenize(command->argv, p_buffer);
-
-
 }
 
 void run_command(Command *command) {
@@ -189,34 +194,121 @@ void run_command(Command *command) {
     char * const newenvp[] = {NULL};
     pid = fork();
 
-    if(pid == 0){
-
+    if (pid == 0) {
         execve(command->argv[0] , command->argv , newenvp);
-        
     }
 
     waitpid(pid, &status, 0);
-
 }
-
-    
 
 int string_comp(const char * str1,const char * str2){
 
-    while(*str1 && *str2){
+    while (*str1 && *str2) {
 
-        if(*str1 != *str2){
-
+        if (*str1 != *str2) {
             return -1;
         }
         str1++;
         str2++;
     }
-    if(*str1 != *str2){
 
+    if (*str1 != *str2) {
         return -1;
     }
 
     return 1;
-    
+}
+
+void get_job(Command *command, Job *job) {
+
+    const char *p_dollar = "$ ";
+    ssize_t bytes_read;
+    char *p_buffer;
+
+    write(2, p_dollar, 2);
+
+    p_buffer = alloc(BUFFER_SIZE);
+    if (p_buffer == NULL) {
+        write(1, "Error: memory allocation failure.\n", 27);
+        return;
+    }
+
+    bytes_read = read(0, p_buffer, BUFFER_SIZE - 1);
+
+    if (bytes_read > 0) {
+        p_buffer[bytes_read] = '\0'; /* same as *(p_buffer + bytes_read) */
+    }
+    else {
+        write(2, "Error: failed to read input.\n", 22);
+        return;
+    }
+
+    free_all();
+
+    tokenize(command->argv, p_buffer);
+}
+
+void run_job(Command *command, Job *job) {
+
+    pid_t pid;
+    int status;
+    char * const newenvp[] = {NULL};
+
+    pid = fork();
+    if (pid == -1) {
+        perror("Error: fork failed.");
+    }
+
+    if (pid == 0) {
+        execve(command->argv[0] , command->argv , newenvp);
+    }
+
+    waitpid(pid, &status, 0);
+}
+
+void init_job(Job *job) {
+    job->num_stages = 0;
+    job->outfile_path = NULL;
+    job->infile_path = NULL;
+    job->background = 0;
+}
+
+void mystrtok(char *string, const char *delimiter) {
+    int i = 0;
+    int token_index = 0; 
+    char *start = 0; 
+
+    while (buffer[i] != '\0') { /*runs till end of buffer*/
+        if (!is_delimiter(buffer[i], delimiters)) {
+            if (buffer[i] != ' ' && buffer[i] != '\n') { 
+                if (start == 0) { /*if start is null */
+                    start = &buffer[i]; /*set start to point at the start of token to be copied*/
+                }
+            }
+        }
+        else { /*else whitespace is found*/
+            if (start != 0) { /*if start already points to a token to be copied*/
+                buffer[i] = '\0'; /*null terminate token*/
+                tokens[token_index++] = start; /*set tokens at specified index to point at start of token*/
+                start = 0; /* reset start*/
+            }
+        }
+        i++;
+    }
+
+    if (start != 0) { /*check to make sure all tokens were accounted for*/
+        tokens[token_index++] = start; 
+    }
+
+    tokens[token_index] = 0; /*null terminate token array*/
+}
+
+/* helper function for mystrtok */
+int is_delimiter(char ch, const char delimiters[]) {
+    for (int i = 0; delimiters[i] != \0; i++) {
+        if (ch == delimiters[i]) {
+            return 1;
+        }
+    }
+    return 0;
 }
