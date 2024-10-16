@@ -1,17 +1,25 @@
 /*---------- ID HEADER -------------------------------------
 /  Author(s):   Andrew Boisvert, Kyle Scidmore
 /  Email(s):    abois526@mtroyal.ca, kscid125@mtroyal.ca
-/  File Name:   stringlib.h
+/  File Name:   memory.h
 /
 /  Program Purpose(s):
 /    TODO
 /---------------------------------------------------------*/
 
-#ifndef STRINGLIB_H
-#define STRINGLIB_H
+#ifndef MEMORY_H
+#define MEMORY_H
 
-int string_comp(const char *str1, const char *str2);
-int string_len(const char *str);
-void string_copy(const char *src, char *dst);
+#include <stddef.h>
+
+#define HEAP_SIZE 4096 /* 4kb of memory */
+
+/* globals */
+extern char heap[HEAP_SIZE];
+extern char *p_free_heap;
+
+
+char *alloc(unsigned int size);
+void free_all();
 
 #endif

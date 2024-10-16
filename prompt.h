@@ -1,17 +1,21 @@
 /*---------- ID HEADER -------------------------------------
 /  Author(s):   Andrew Boisvert, Kyle Scidmore
 /  Email(s):    abois526@mtroyal.ca, kscid125@mtroyal.ca
-/  File Name:   stringlib.h
+/  File Name:   prompt.h
 /
 /  Program Purpose(s):
 /    TODO
 /---------------------------------------------------------*/
 
-#ifndef STRINGLIB_H
-#define STRINGLIB_H
+#ifndef PROMPT_H
+#define PROMPT_H
 
-int string_comp(const char *str1, const char *str2);
-int string_len(const char *str);
-void string_copy(const char *src, char *dst);
+#define ANSI_MAGENTA "\033[1;35m"
+#define ANSI_CYAN "\033[0;36m"
+#define ANSI_RESET "\033[0m"
+#define PATH_MAX 4096
+#define HOST_MAX 253
+
+void show_prompt();
 
 #endif

@@ -11,7 +11,7 @@
 #--------- Variable declarations ---------------------------
 # Targets and objects
 TARGET=kash
-OBJECTS=kash.o stringlib.o 
+OBJECTS=stringlib.o prompt.o memory.o jobs.o commands.o kash.o
 
 # CC stuff
 CC=gcc
@@ -28,14 +28,26 @@ $(TARGET): $(OBJECTS)
 
 # Cleaning up the old object files and executable
 clean:
-	$(RM) *.o $(TARGET)
+	rm -f *.o $(TARGET)
 
 
 #--------- Creating Object Files --------------------------- 
-kash.o: kash.c
+kash.o: kash.c commands.h jobs.h memory.h prompt.h stringlib.h
 	$(CC) $(CFLAGS) -c kash.c 
 
+commands.o: commands.c commands.h errorcodes.h
+	$(CC) $(CFLAGS) -c commands.c 
+
+jobs.o: jobs.c jobs.h commands.h
+	$(CC) $(CFLAGS) -c jobs.c 
+
+memory.o: memory.c memory.h
+	$(CC) $(CFLAGS) -c memory.c 
+
+prompt.o: prompt.c prompt.h stringlib.h
+	$(CC) $(CFLAGS) -c prompt.c 
+
 stringlib.o: stringlib.c stringlib.h 
-	$(CC) $(CFLAGS) -c stringlib.c 
+	$(CC) $(CFLAGS) -c stringlib.c
 
 # The empty line above this comment must remain to avoid errors

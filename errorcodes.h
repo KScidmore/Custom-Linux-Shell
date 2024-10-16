@@ -1,17 +1,17 @@
 /*---------- ID HEADER -------------------------------------
 /  Author(s):   Andrew Boisvert, Kyle Scidmore
 /  Email(s):    abois526@mtroyal.ca, kscid125@mtroyal.ca
-/  File Name:   stringlib.h
+/  File Name:   errorcodes.h
 /
 /  Program Purpose(s):
 /    TODO
 /---------------------------------------------------------*/
 
-#ifndef STRINGLIB_H
-#define STRINGLIB_H
+#ifndef ERRORCODES_H
+#define ERRORCODES_H
 
-int string_comp(const char *str1, const char *str2);
-int string_len(const char *str);
-void string_copy(const char *src, char *dst);
+#define ERROR_MEMORY "Error: memory allocation failure!\n\r"
+#define ERROR_READ "Error: failed to read input!\n\r"
+#define ERROR_INVALID_COMMAND "Error: PEBKAC--invalid command.\n\r"
 
 #endif
