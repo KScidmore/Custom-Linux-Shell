@@ -157,3 +157,28 @@ void tokenize(char *tokens[], char buffer[]) {
     tokens[token_index] = 0; /*null terminate token array*/
 
 }
+
+/usr/bin/ls -al | /usr/bin/ls -al > /usr/bin/ls -al
+tokens[/usr/bin/ls, -al , | , /usr/bin/ls, -al , > , /usr/bin/ls, al]
+
+
+/usr/bin/ls -al /library | /usr/bin/wc -l > dirlistlen &
+
+ls -al /library | wc -l >> filename.txt &
+
+
+textfile:
+"ls contents
+"
+
+ls > lscontents.txt
+
+wc < lscontents.txt 
+
+9
+
+void wrapper(){
+
+}
+
+#define ERRCHK_WRITE(fd, buf, len) 

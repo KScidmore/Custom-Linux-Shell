@@ -49,9 +49,7 @@ void init_job(Job *job) {
 /    TODO - N/A or list them
 /---------------------------------------------------------*/
 void get_job(Job *job) {
-    Command *command = &job->pipeline[0];
-
-    get_command(command);
+    get_command(&job->pipeline[0]);
 
     job->num_stages = 1;
     job->background = 0;
@@ -75,6 +73,5 @@ void get_job(Job *job) {
 /    TODO - N/A or list them
 /---------------------------------------------------------*/
 void run_job(Job *job) {
-    Command *command = &job->pipeline[0];
-    run_command(command);
+    run_command(&job->pipeline[0]);
 }

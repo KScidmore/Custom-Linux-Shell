@@ -108,3 +108,9 @@ void string_copy(const char *src, char *dst){
     *dst = '\0';
 
 }
+
+char *sub_string(const char *command){
+
+
+    
+}
