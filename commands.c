@@ -20,18 +20,21 @@
 
 /*---------- FUNCTION: get_command -------------------------
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Reads a command from standard input, processes it, and 
+/    stores the tokenized input into the provided array.
 /  
 /  CALLER INPUT:
 /    char *tokens[]
-/      TODO
+/      - Stores an array of tokens generated from the input.
 /  
 /  CALLER OUTPUT:
 /    N/A--No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    - Assumes that the input will be less than BUFFER_SIZE.
+/
 /---------------------------------------------------------*/
+
 void get_command(char *tokens[]) {
 
     ssize_t bytes_read;
@@ -68,18 +71,22 @@ void get_command(char *tokens[]) {
 
 /*---------- FUNCTION: run_command -------------------------
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Executes a command by forking a new process and using execve()
+/    to run the command.
 /  
 /  CALLER INPUT:
 /    Command *command
-/      TODO
+/      - A pointer to a Command structure containing the command's arguments.
 /  
 /  CALLER OUTPUT:
 /    N/A--No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    - Deprecated: No longer used and has been replaced by routine 
+/      that supports pipelines and I/O redirection.
+/    - Assumes that command->argv is populated and terminated with NULL.
 /---------------------------------------------------------*/
+
 void run_command(Command *command) {
 
     pid_t pid;
@@ -102,22 +109,24 @@ void run_command(Command *command) {
 
 /*---------- FUNCTION: tokenize ----------------------------
 /  PURPOSE:
-/    This function breaks a buffer of user input into seperate 
-/    command line arguments (tokens), using whitespace as the 
-/    delimiter value. 
+/    Breaks a buffer of user input into separate command line arguments, 
+/    using whitespace as the delimiter.
 /  
 /  CALLER INPUT:
 /    char *tokens[]
-/      TODO
+/      - Stores an array of tokens generated from the input.
 /    char buffer[]
-/      TODO
+/      - The buffer containing the user input.
 /  
 /  CALLER OUTPUT:
 /    N/A--No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    - Assumes that the tokens array has enough space to store all tokens from 
+/      the buffer.
+/    - Assumes that the buffer contains valid input and is null-terminated.
 /---------------------------------------------------------*/
+
 void tokenize(char *tokens[], char buffer[]) {
 
     int i = 0;

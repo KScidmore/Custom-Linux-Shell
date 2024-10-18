@@ -4,7 +4,8 @@
 /  File Name:   memory.c
 /
 /  Program Purpose(s):
-/    TODO
+/    Contains memory allocation functions for managing a 
+/    fixed-size heap.
 /---------------------------------------------------------*/
 
 #include "memory.h"
@@ -14,17 +15,20 @@ char *p_free_heap = heap;
 
 /*---------- FUNCTION: alloc -------------------------------
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Allocates a block of memory from the heap and returns a 
+/    pointer to the allocated memory.
 /  
 /  CALLER INPUT:
 /    unsigned int size 
-/      TODO 
+/      - The size of memory to allocate in bytes.
 /  
 /  CALLER OUTPUT:
-/    TODO - purpose of output parameters and return vals
+/    Returns a pointer to the allocated memory block 
+/    or NULL if the allocation fails.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    - Assumes that there is enough memory available in the 
+/      heap for allocation.
 /---------------------------------------------------------*/
 char *alloc(unsigned int size) {
     /*Calculate the new pointer after allocation*/
@@ -42,16 +46,17 @@ char *alloc(unsigned int size) {
 
 /*---------- FUNCTION: free_all ----------------------------
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Resets the free heap pointer to the start of the heap,
+/    to free allocated memory.
 /  
 /  CALLER INPUT:
-/    N/A--No input parameters. 
+/    N/A-No input parameters. 
 /  
 /  CALLER OUTPUT:
-/    N/A--No return value.
+/    N/A-No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    N/A
 /---------------------------------------------------------*/
 void free_all() {
     p_free_heap = heap;

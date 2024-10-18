@@ -4,7 +4,8 @@
 /  File Name:   signals.c
 /
 /  Program Purpose(s):
-/    TODO
+/    This module handles signal management for child processes
+/    and interrupts.
 /---------------------------------------------------------*/
 #include <stdio.h>
 #include <sys/types.h>
@@ -16,19 +17,22 @@
 #include "globals.h"
 #include "prompt.h"
 
-
 /*---------- FUNCTION: child_signal ------------------------
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Handles the SIGCHLD signal. This function reaps child 
+/    processes that have exited to prevent zombie processes.
 /  
 /  CALLER INPUT:
-/    TODO - purpose of input parameters 
+/    int sig
+/      The signal number received.
 /  
 /  CALLER OUTPUT:
-/    TODO
+/    N/A--No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    - Does not provide feedback on the status of terminated 
+/      child processes, which may limit debugging capabilities.
+/      (Having prompt issues with output may add later)
 /---------------------------------------------------------*/
 void child_signal(int sig){
 
@@ -44,18 +48,20 @@ void child_signal(int sig){
     errno = old_errno;
 }
 
-/*---------- FUNCTION: interrupt_block ---------------------
+/*---------- FUNCTION: interrupt_block --------------------- 
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Handles the SIGINT signal. Preventing Ctrl-C from
+/    terminating the shell during user input.
 /  
 /  CALLER INPUT:
-/    TODO - purpose of input parameters 
+/    int sig
+/      The signal number received.
 /  
 /  CALLER OUTPUT:
-/    TODO
+/    N/A-No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/   N/A
 /---------------------------------------------------------*/
 void interrupt_block(int sig){
 

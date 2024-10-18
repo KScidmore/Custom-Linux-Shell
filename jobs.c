@@ -4,7 +4,9 @@
 /  File Name:   jobs.c
 /
 /  Program Purpose(s):
-/    TODO
+/    Contains functions to manage job execution including 
+/    initializing jobs, running them in the foreground or 
+/    background, and handling I/O redirection.
 /---------------------------------------------------------*/
 
 #include <fcntl.h>
@@ -25,17 +27,18 @@
 
 /*---------- FUNCTION: init_job ----------------------------
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Initializes the Job struct by setting default values.
 /  
 /  CALLER INPUT:
 /    Job *job
-/      TODO 
+/      - A pointer to a Job struct.
 /  
 /  CALLER OUTPUT:
 /    N/A--No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    - Assumes that job is a valid pointer to a Job structure.
+/    - No known bugs or limitations.
 /---------------------------------------------------------*/
 void init_job(Job *job) {
     job->num_stages = 0;
@@ -47,17 +50,18 @@ void init_job(Job *job) {
 
 /*---------- FUNCTION: run_job -----------------------------
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Executes a Job with multiple stages. Creates pipes for ipc 
+/    and forks child processes to run each command as needed.
 /  
 /  CALLER INPUT:
 /    Job *job
-/      TODO 
+/      - A pointer to a Job struct.
 /  
 /  CALLER OUTPUT:
 /    N/A--No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    - Assumes that the job structure has been properly configured.
 /---------------------------------------------------------*/
 void run_job(Job *job){
 
@@ -108,21 +112,26 @@ void run_job(Job *job){
 
 /*---------- FUNCTION: process_job -------------------------
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Forks a new process to execute a stage of the job and 
+/    sets up input and output redirection as needed.
 /  
 /  CALLER INPUT:
 /    Job *job
-/      TODO 
+/      - A pointer to a Job struct.
 /    int stage
-/      TODO 
+/      - The index of the current stage within the job.
 /    int *pipefd
-/      TODO 
-/    
+/      - An array of file descriptors for the pipes connecting 
+/        the stages.
+/  
 /  CALLER OUTPUT:
-/    TODO - purpose of output parameters and return vals
+/    Returns the PID of the created child process.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    - Assumes that the stage index is within bounds of 
+/      the job's number of stages.
+/    - Assumes that the commands have been properly populated 
+/      in the job struct.
 /---------------------------------------------------------*/
 pid_t process_job(Job *job, int stage, int *pipefd){
 

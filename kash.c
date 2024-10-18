@@ -4,7 +4,9 @@
 /  File Name:   kash.c
 /
 /  Program Purpose(s):
-/    TODO
+/    Implements a simple command-line shell that processes 
+/    user input, manages job execution, and handles signals 
+/    for background processes.
 /---------------------------------------------------------*/
 
 /* includes (<> then "") */
@@ -26,17 +28,17 @@
 
 /*---------- FUNCTION: main --------------------------------
 /  PURPOSE:
-/    Implements the main loop, which processes input 
-/    commands until the user exits the program.
+/    Implements the main loop, which processes input commands
+/    until the user exits the program.
 /  
 /  CALLER INPUT:
-/    N/A--No input parameters.
+/    N/A-No input parameters.
 /  
 /  CALLER OUTPUT:
 /    Returns '0' upon successful exit.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/   N/A
 /---------------------------------------------------------*/
 int main() {
 

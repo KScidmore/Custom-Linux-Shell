@@ -4,27 +4,30 @@
 /  File Name:   stringlib.c
 /
 /  Program Purpose(s):
-/    TODO
+/    Basic string functions including comparison, length, 
+/    copying, and converting PIDs to strings.
 /---------------------------------------------------------*/
 
 #include "stringlib.h"
 #include <sys/types.h>
 
-/*---------- FUNCTION: string_comp -------------------------
+/*---------- FUNCTION: string_comp ------------------------- 
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Compares two strings for equality. Returns 0 if equal, 
+/    -1 if not.
 /  
 /  CALLER INPUT:
 /    const char *str1
-/      TODO 
+/      Pointer to the first string to be compared.
 /    const char *str2
-/      TODO 
+/      Pointer to the second string to be compared.
 /  
 /  CALLER OUTPUT:
-/    TODO - purpose of output parameters and return vals
+/    Returns 0 if both strings are equal; otherwise, 
+/    returns -1.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    - Both input strings should be null-terminated. 
 /---------------------------------------------------------*/
 int string_comp(const char *str1, const char *str2){
 
@@ -47,19 +50,68 @@ int string_comp(const char *str1, const char *str2){
 }
 
 
-/*---------- FUNCTION: string_len --------------------------
+
+Here’s a detailed documentation for the stringlib.c file, including the ID header and documentation blocks for the functions:
+
+c
+Copy code
+/*---------- ID HEADER -------------------------------------
+/  Author(s):   Andrew Boisvert, Kyle Scidmore
+/  Email(s):    abois526@mtroyal.ca, kscid125@mtroyal.ca
+/  File Name:   stringlib.c
+/
+/  Program Purpose(s):
+/    This module provides basic string manipulation functions
+/    such as comparison, length calculation, copying, and 
+/    converting process IDs to strings.
+/---------------------------------------------------------*/
+
+#include "stringlib.h"
+#include <sys/types.h>
+
+/*---------- FUNCTION: string_comp ------------------------- 
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Compares two strings for equality. Returns 0 if the 
+/    strings are equal, -1 if they are different.
+/  
+/  CALLER INPUT:
+/    const char *str1
+/      Pointer to the first string to be compared.
+/    const char *str2
+/      Pointer to the second string to be compared.
+/  
+/  CALLER OUTPUT:
+/    Returns '0' if both strings are equal; otherwise, 
+/    returns '-1'.
+/  
+/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
+/    - Both input strings should be null-terminated. 
+/      No bounds checking is performed on the input strings.
+/---------------------------------------------------------*/
+int string_comp(const char *str1, const char *str2) {
+    while (*str1 && *str2) {
+        if (*str1 != *str2) {
+            return -1;
+        }
+        str1++;
+        str2++;
+    }
+    return (*str1 != *str2) ? -1 : 0;
+}
+
+/*---------- FUNCTION: string_len -------------------------- 
+/  PURPOSE:
+/    Calculates the length of a string.
 /  
 /  CALLER INPUT:
 /    const char *str
-/      TODO 
+/      Pointer to a string.
 /  
 /  CALLER OUTPUT:
-/    TODO - purpose of output parameters and return vals
+/    Returns the length of the string as an int.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    - The input string should be null-terminated.
 /---------------------------------------------------------*/
 int string_len(const char *str){
 
@@ -77,21 +129,21 @@ int string_len(const char *str){
 }
 
 
-/*---------- FUNCTION: string_copy -------------------------
+/*---------- FUNCTION: string_copy ------------------------- 
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Copies a string into a buffer, 
 /  
 /  CALLER INPUT:
 /    const char *src
-/      TODO 
+/      Pointer to the source string.
 /    char *dst
-/      TODO 
+/      Pointer to the destination buffer.
 /  
 /  CALLER OUTPUT:
-/    N/A--No return value.
+/    N/A-No return value. dst contains the copied string.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    - dst must be large enough to hold the source.
 /---------------------------------------------------------*/
 void string_copy(const char *src, char *dst){
 
@@ -107,6 +159,23 @@ void string_copy(const char *src, char *dst){
 
 }
 
+/*---------- FUNCTION: pid_to_string ---------------------- 
+/  PURPOSE:
+/    Converts a PID to a string.
+/  
+/  CALLER INPUT:
+/    pid_t pid
+/      The PID to convert.
+/    char *buffer
+/      Pointer to a buffer for the string.
+/  
+/  CALLER OUTPUT:
+/    N/A-No return value. The buffer contains the PID as a
+/    string
+/  
+/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
+/    N/A
+/---------------------------------------------------------*/
 void pid_to_string(pid_t pid, char *buffer){
     int i = 0;
 

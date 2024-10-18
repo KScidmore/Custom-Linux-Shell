@@ -4,7 +4,9 @@
 /  File Name:   parse.c
 /
 /  Program Purpose(s):
-/    TODO
+/    Contains functions to parse user input and break it
+/    into commands which are placed into the job struct 
+/    to be ran in the shell.
 /---------------------------------------------------------*/
 
 #include <sys/types.h>
@@ -16,21 +18,24 @@
 
 /*---------- FUNCTION: parse_command -----------------------
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Parses the array of tokens to populate the Command and Job 
+/    structs with info, including command args and I/O redirection paths.
 /  
 /  CALLER INPUT:
 /    Command *command
-/      TODO 
+/      - A pointer to a Command struct within the job struct.
 /    char *tokens[]
-/      TODO 
+/      - An array of strings that contains the tokenized input from the user.
 /    Job *job
-/      TODO 
+/      - A pointer to a Job struct.
 /  
 /  CALLER OUTPUT:
 /    N/A--No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    - Assumes that the tokens array is properly formatted and null-terminated.
+/    - Assumes that command->argv has enough space to store all command-line 
+/      arguments.
 /---------------------------------------------------------*/
 void parse_command(Command *command, char *tokens[], Job *job){
 
@@ -67,19 +72,21 @@ void parse_command(Command *command, char *tokens[], Job *job){
 
 /*---------- FUNCTION: parse_pipeline ----------------------
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Parses an array of tokens to build a pipeline of commands
+/    splitting the commands at pipe symbols.
 /  
 /  CALLER INPUT:
 /    Job *job
-/      TODO 
+/      - A pointer to a Job struct.
 /    char *tokens[]
-/      TODO 
+/      - An array of strings that contains the tokenized input from the user.
 /  
 /  CALLER OUTPUT:
 /    N/A--No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    - Assumes that the tokens array is properly formatted and 
+/      null-terminated.
 /---------------------------------------------------------*/
 void parse_pipeline(Job *job, char *tokens[]){
 
@@ -111,18 +118,18 @@ void parse_pipeline(Job *job, char *tokens[]){
 
 /*---------- FUNCTION: parse_job ---------------------------
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    Parses a job by getting a command from user input and 
+/    then buildis the pipeline of commands based on the input.
 /  
 /  CALLER INPUT:
 /    Job *job
-/      TODO 
-
+/      - A pointer to a Job struct.
 /  
 /  CALLER OUTPUT:
 /    N/A--No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    TODO - N/A or list them 
+/    - Assumes that the job struct is properly initialized.
 /---------------------------------------------------------*/
 void parse_job(Job *job){
 
