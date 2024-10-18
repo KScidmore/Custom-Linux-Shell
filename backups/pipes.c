@@ -3,11 +3,13 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include "errorcodes.h"
+#include "stringlib.h"
 
 #define READ_END  0
 #define WRITE_END 1
 
-int main()
+void pipes()
 {
     int pipefd[2];
     int pid1, pid2;
@@ -18,13 +20,14 @@ int main()
     char *const envp[] = { NULL };
 
     if (pipe(pipefd) == -1) { /* create pipe & error handling */
-        perror("Error: pipe failed.");
+        write(2, ERROR_PIPE_FAILED, string_len(ERROR_PIPE_FAILED));
         exit(EXIT_FAILURE);
     }
 
     pid1 = fork();
     if (pid1 == -1) {
-        perror("Error: fork failed.");
+        write(2, ERROR_FORK_FAILED, string_len(ERROR_FORK_FAILED));
+        exit(EXIT_FAILURE);
     }
 
     if (pid1 == 0) {
@@ -37,7 +40,8 @@ int main()
 
     pid2 = fork();
     if (pid2 == -1) {
-        perror("Error: fork failed.");
+        write(2, ERROR_FORK_FAILED, string_len(ERROR_FORK_FAILED));
+        exit(EXIT_FAILURE);
     }
 
     if (pid2 == 0) {

@@ -1,10 +1,10 @@
 /*---------- ID HEADER -------------------------------------
 /  Author(s):   Andrew Boisvert, Kyle Scidmore
 /  Email(s):    abois526@mtroyal.ca, kscid125@mtroyal.ca
-/  File Name:   stringlib.h
+/  File Name:   commands.h
 /
 /  Program Purpose(s):
-/    TODO
+/    User-defined header file for commands.c. 
 /---------------------------------------------------------*/
 
 #ifndef COMMANDS_H
@@ -13,13 +13,16 @@
 #define MAX_ARGS 256 
 #define BUFFER_SIZE 1024
 
-/*---------- structure: command ----------------------------
-/  info:
-/    data structure for representing linux commands.
+/*---------- STRUCTURE: command ----------------------------
+/  INFO:
+/    Data structure for representing a linux command. 
 /  
-/  attributes:
-/    char *argv - an array of pointers to dyn-alloc'ed strings
-/    unsigned int argc - argument count (the size of the array)
+/  ATTRIBUTES:
+/    char *argv[]
+/      an array of pointers to dynamically allocated strings
+/      representing entered arguments 
+/    unsigned int argc
+/      argument count (the size of the array)
 /---------------------------------------------------------*/
 typedef struct {
     char *argv[MAX_ARGS+1];
@@ -27,7 +30,7 @@ typedef struct {
     /* it is noted that we may need to add more here, later */
 } Command;
 
-void get_command(Command *command);
+void get_command(char *tokens[]);
 void run_command(Command *command);
 void tokenize(char *tokens[], char buffer[]);
 

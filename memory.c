@@ -12,6 +12,20 @@
 char heap[HEAP_SIZE];
 char *p_free_heap = heap;
 
+/*---------- FUNCTION: alloc -------------------------------
+/  PURPOSE:
+/    TODO - purpose from the caller's perspective 
+/  
+/  CALLER INPUT:
+/    unsigned int size 
+/      TODO 
+/  
+/  CALLER OUTPUT:
+/    TODO - purpose of output parameters and return vals
+/  
+/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
+/    TODO - N/A or list them 
+/---------------------------------------------------------*/
 char *alloc(unsigned int size) {
     /*Calculate the new pointer after allocation*/
     char *new_free_heap = p_free_heap + size;
@@ -26,6 +40,19 @@ char *alloc(unsigned int size) {
     }
 }
 
+/*---------- FUNCTION: free_all ----------------------------
+/  PURPOSE:
+/    TODO - purpose from the caller's perspective 
+/  
+/  CALLER INPUT:
+/    N/A--No input parameters. 
+/  
+/  CALLER OUTPUT:
+/    N/A--No return value.
+/  
+/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
+/    TODO - N/A or list them 
+/---------------------------------------------------------*/
 void free_all() {
     p_free_heap = heap;
 }

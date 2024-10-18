@@ -1,10 +1,10 @@
-/*---------- id header -------------------------------------
-/  author(s):   andrew boisvert, kyle scidmore
-/  email(s):    abois526@mtroyal.ca, kscid125@mtroyal.ca
-/  file name:   kash.c
+/*---------- ID HEADER -------------------------------------
+/  Author(s):   Andrew Boisvert, Kyle Scidmore
+/  Email(s):    abois526@mtroyal.ca, kscid125@mtroyal.ca
+/  File Name:   kash.c
 /
-/  program purpose(s):
-/    todo
+/  Program Purpose(s):
+/    TODO
 /---------------------------------------------------------*/
 
 /* includes (<> then "") */
@@ -13,32 +13,58 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <signal.h>
 #include "commands.h"
-#include "errorcodes.h"
 #include "jobs.h"
 #include "memory.h"
 #include "prompt.h"
 #include "stringlib.h"
+#include "parse.h"
+#include "signals.h"
+#include "errorcodes.h"
+#include "globals.h"
 
-/* globals */
-
-
-
+/*---------- FUNCTION: main --------------------------------
+/  PURPOSE:
+/    Implements the main loop, which processes input 
+/    commands until the user exits the program.
+/  
+/  CALLER INPUT:
+/    N/A--No input parameters.
+/  
+/  CALLER OUTPUT:
+/    Returns '0' upon successful exit.
+/  
+/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
+/    TODO - N/A or list them 
+/---------------------------------------------------------*/
 int main() {
 
-    Command command;
     Job job;
 
-    while (1) {
-        init_job(&job);
-        get_job(&job);
+    signal(SIGINT, interrupt_block);
+    signal(SIGCHLD, child_signal);
 
-        if(string_comp(job.pipeline[0].argv[0], "exit") == 1){
+    while (1) {
+
+        show_prompt();
+        init_job(&job);
+        parse_job(&job);
+        
+        if (job.pipeline[0].argv[0] == NULL) {
+            write(STDOUT, ERROR_NO_COMMAND, string_len(ERROR_NO_COMMAND));
+            init_job(&job);
+            continue;
+        }
+
+        if (string_comp(job.pipeline[0].argv[0], "exit") == 0) {
             break;
         }
-        
+
         run_job(&job);
+        
     }
 
     return 0;
+    
 }

@@ -13,21 +13,18 @@
 #include "prompt.h"
 #include "stringlib.h"
 
-/*---------- FUNCTION: TODO --------------------------------
+/*---------- FUNCTION: show_prompt -------------------------
 /  PURPOSE:
 /    TODO - purpose from the caller's perspective 
 /  
 /  CALLER INPUT:
-/    TODO - purpose of input parameters 
+/    N/A--No input parameters. 
 /  
 /  CALLER OUTPUT:
-/    TODO - purpose of output parameters and return vals
+/    N/A--No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    TODO - N/A or list them 
-/
-/  CITATIONS:
-/    TODO - N/A or list them
 /---------------------------------------------------------*/
 
 /* 

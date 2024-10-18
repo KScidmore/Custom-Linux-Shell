@@ -1,0 +1,79 @@
+Basic command WORKS
+/usr/bin/ls -al
+
+---
+
+Single stage pipeline WORKS
+/usr/bin/ls -al /usr/bin | /usr/bin/wc -l
+
+1561
+
+---
+
+Input redirection WORKS
+/usr/bin/wc -l < dirlist.txt
+
+34
+
+---
+
+Output redirection WORKS
+/usr/bin/ls -al > dirlist.txt
+
+---
+
+Input and output redirection WORKS
+/usr/bin/wc -w < dirlist.txt > wordcount.txt
+
+99
+
+---
+
+Two stage with output redirection WORKS
+/usr/bin/ls -al | /usr/bin/wc -l > dirlistlen.txt
+
+36
+
+---
+
+Background WORKS
+/usr/bin/ls -al /usr/bin | /usr/bin/wc -l > dirlistlen.txt &
+
+file:
+1561
+
+stdout:
+[1] {pid} 
+
+---
+
+Three stage WORKS
+/usr/bin/cat dirlist.txt | /usr/bin/grep "word" | /usr/bin/wc -l
+
+0
+
+---
+
+Background with input/output redirection WORKS
+/usr/bin/wc -w < dirlist.txt > wordcount.txt &
+
+[1] wordcount.txt shows 300
+
+---
+
+Invalid command WORKS
+/usr/bin/invalidcmd -x
+
+---
+
+multistage 
+
+ls -al | wc | wc | wc | ... 
+
+    51  452 2961
+    1   3   5
+    1   3   5
+    1   3   5
+    1   3   5
+
+/usr/bin/ls -al | /usr/bin/wc | /usr/bin/wc | /usr/bin/wc | /usr/bin/wc | /usr/bin/wc | /usr/bin/wc | /usr/bin/wc | /usr/bin/wc

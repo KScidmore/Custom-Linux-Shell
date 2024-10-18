@@ -1,7 +1,7 @@
 /*---------- ID HEADER -------------------------------------
 /  Author(s):   Andrew Boisvert, Kyle Scidmore
 /  Email(s):    abois526@mtroyal.ca, kscid125@mtroyal.ca
-/  File Name:   stringlib.h
+/  File Name:   commands.c 
 /
 /  Program Purpose(s):
 /    TODO
@@ -11,33 +11,32 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <signal.h>
 #include "errorcodes.h"
 #include "commands.h"
 #include "memory.h"
 #include "prompt.h"
+#include "signals.h"
 
-/*---------- FUNCTION: TODO --------------------------------
+/*---------- FUNCTION: get_command -------------------------
 /  PURPOSE:
 /    TODO - purpose from the caller's perspective 
 /  
 /  CALLER INPUT:
-/    TODO - purpose of input parameters 
+/    char *tokens[]
+/      TODO
 /  
 /  CALLER OUTPUT:
-/    TODO - purpose of output parameters and return vals
+/    N/A--No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    TODO - N/A or list them 
-/
-/  CITATIONS:
-/    TODO - N/A or list them
 /---------------------------------------------------------*/
-void get_command(Command *command) {
+void get_command(char *tokens[]) {
 
     ssize_t bytes_read;
     char *p_buffer;
-
-    show_prompt();
+    
 
     p_buffer = alloc(BUFFER_SIZE);
     if (p_buffer == NULL) {
@@ -46,6 +45,7 @@ void get_command(Command *command) {
     }
 
     bytes_read = read(0, p_buffer, BUFFER_SIZE - 1);
+
     if (bytes_read > 0) {
         p_buffer[bytes_read] = '\0'; /* same as *(p_buffer + bytes_read) */
 
@@ -56,31 +56,29 @@ void get_command(Command *command) {
 
     }
     else {
-
         write(2, ERROR_READ, sizeof(ERROR_READ) - 1);
         return;
     }
+    
+    tokenize(tokens, p_buffer);
 
-
-    tokenize(command->argv, p_buffer);
     free_all();
+
 }
 
-/*---------- FUNCTION: TODO --------------------------------
+/*---------- FUNCTION: run_command -------------------------
 /  PURPOSE:
 /    TODO - purpose from the caller's perspective 
 /  
 /  CALLER INPUT:
-/    TODO - purpose of input parameters 
+/    Command *command
+/      TODO
 /  
 /  CALLER OUTPUT:
-/    TODO - purpose of output parameters and return vals
+/    N/A--No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    TODO - N/A or list them 
-/
-/  CITATIONS:
-/    TODO - N/A or list them
 /---------------------------------------------------------*/
 void run_command(Command *command) {
 
@@ -102,23 +100,24 @@ void run_command(Command *command) {
 }
 
 
-/*---------- FUNCTION: TODO --------------------------------
+/*---------- FUNCTION: tokenize ----------------------------
 /  PURPOSE:
-/    TODO - purpose from the caller's perspective 
+/    This function breaks a buffer of user input into seperate 
+/    command line arguments (tokens), using whitespace as the 
+/    delimiter value. 
 /  
 /  CALLER INPUT:
-/    TODO - purpose of input parameters 
+/    char *tokens[]
+/      TODO
+/    char buffer[]
+/      TODO
 /  
 /  CALLER OUTPUT:
-/    TODO - purpose of output parameters and return vals
+/    N/A--No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    TODO - N/A or list them 
-/
-/  CITATIONS:
-/    TODO - N/A or list them
 /---------------------------------------------------------*/
-/*breaks buffer into command line arguments (tokens) based on whitespace*/
 void tokenize(char *tokens[], char buffer[]) {
 
     int i = 0;
@@ -157,28 +156,3 @@ void tokenize(char *tokens[], char buffer[]) {
     tokens[token_index] = 0; /*null terminate token array*/
 
 }
-
-/usr/bin/ls -al | /usr/bin/ls -al > /usr/bin/ls -al
-tokens[/usr/bin/ls, -al , | , /usr/bin/ls, -al , > , /usr/bin/ls, al]
-
-
-/usr/bin/ls -al /library | /usr/bin/wc -l > dirlistlen &
-
-ls -al /library | wc -l >> filename.txt &
-
-
-textfile:
-"ls contents
-"
-
-ls > lscontents.txt
-
-wc < lscontents.txt 
-
-9
-
-void wrapper(){
-
-}
-
-#define ERRCHK_WRITE(fd, buf, len) 

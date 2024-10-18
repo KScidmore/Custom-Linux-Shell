@@ -25,7 +25,7 @@
         }
 
 - Naming Variables:
-    - camelCase
+    - snake_case
 
 - Misc:
     - lines must not exceed 80 characters 

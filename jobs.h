@@ -4,7 +4,7 @@
 /  File Name:   jobs.h
 /
 /  Program Purpose(s):
-/    TODO
+/    User-defined header file for jobs.c. 
 /---------------------------------------------------------*/
 
 #ifndef JOBS_H
@@ -13,23 +13,28 @@
 #include <stddef.h>
 #include "commands.h"
 
-#define MAX_PIPELINE_LENGTH 2
+#define MAX_PIPELINE_LENGTH 10
 
-/*---------- structure: command ----------------------------
-/  info:
-/    data structure for representing a job.
+/*---------- STRUCTURE: Job --------------------------------
+/  INFO:
+/    Data structure for representing a job.
 /  
-/  attributes:
-/    Command pipeline[MAX_PIPELINE_LENGTH];
-/      TODO
-/    unsigned int num_stages;
-/      TODO - also expand upon below 
-/    char *outfile_path;   
-/      NULL for no output redirection
-/    char *infile_path;    
-/      NULL for no input redirection
-/    int background;       
-/      0 = foreground, !0 = background
+/  ATTRIBUTES:
+/    Command pipeline[]
+/      An array of Command structs, each representing an individual
+/      linux command, to help facilitate piping commands together.
+/    unsigned int num_stages
+/      The number of pipeline stages i.e. the number of commands
+/      currently in the pipeline. 
+/    char *outfile_path
+/      The filepath to be used for output redirection. If the job 
+/      requires no output redirection, this value will be NULL.
+/    char *infile_path
+/      The filepath to be used for input redirection. If the job 
+/      requires no output redirection, this value will be NULL.
+/    int background
+/      Represents if the job will run as a foreground or background
+/      process (0 = foreground, !0 = background).
 /---------------------------------------------------------*/
 typedef struct {
     Command pipeline[MAX_PIPELINE_LENGTH];
@@ -40,7 +45,7 @@ typedef struct {
 } Job;
 
 void init_job(Job *job);
-void get_job(Job *job);
 void run_job(Job *job);
+pid_t process_job(Job *job, int stage, int *pipefd);
 
 #endif

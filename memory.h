@@ -4,7 +4,7 @@
 /  File Name:   memory.h
 /
 /  Program Purpose(s):
-/    TODO
+/    User-defined header file for memory.c. 
 /---------------------------------------------------------*/
 
 #ifndef MEMORY_H
