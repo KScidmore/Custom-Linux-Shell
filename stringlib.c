@@ -127,3 +127,27 @@ void pid_to_string(pid_t pid, char *buffer){
         buffer[i - j - 1] = temp;
     }
 }
+
+/*---------- FUNCTION: str_comp_by_len ---------------------
+/  PURPOSE:
+/    TODO - purpose from the caller's perspective 
+/  
+/  CALLER INPUT:
+/    TODO - purpose of input parameters 
+/  
+/  CALLER OUTPUT:
+/    TODO - purpose of output parameters and return vals
+/  
+/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
+/    TODO - N/A or list them 
+/---------------------------------------------------------*/
+int str_comp_by_len(const char *str1, const char *str2, int len){
+
+    for (int i = 0; i < len; i++) {
+        if(str1[i] != str2[i]){
+            return -1;
+        }
+    }
+
+    return 0;
+}
