@@ -33,24 +33,24 @@ Input: /bin/sleep 5 &
 Expected Output: PID of the background process.
 Result: PASS
 
-6. Input Redirection
-
-Description: Test input redirection
-Input: /usr/bin/sort < file.txt
-Expected Output: Sorted contents of file.txt displayed.
-Result: PASS
-
-7. Output Redirection
+6. Output Redirection
 
 Description: Test output redirection
 Input: /bin/ls > output.txt
 Expected Output: The file output.txt should contain the output of ls.
 Result: PASS
 
+7. Input Redirection
+
+Description: Test input redirection
+Input: /usr/bin/sort < output.txt
+Expected Output: Sorted contents of file.txt displayed.
+Result: PASS
+
 8. Combined Input and Output Redirection
 
 Description: Test combined input and output redirection
-Input: /usr/bin/wc -w < dirlist.txt > wordcount.txt
+Input: /usr/bin/wc -w < output.txt > wordcount.txt
 Expected Output: The file wordcount.txt should contain the number of words from dirlist.txt
 Result: PASS
 
@@ -102,7 +102,7 @@ Result: PASS
 15. Command with Input and Output Redirection in Background
 
 Description: Test a command with input redirection, output redirection, and background execution.
-Input: /usr/bin/wc -w < dirlist.txt > wordcount.txt &
+Input: /usr/bin/wc -w < output.txt > wordcount.txt &
 Expected Output:
     -The command should execute in the background without blocking the shell.
     -The file wordcount.txt should contain the word count of the contents of dirlist.txt.
