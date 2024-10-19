@@ -4,7 +4,7 @@
 /  File Name:   signals.c
 /
 /  Program Purpose(s):
-/    This module handles signal management for child processes
+/    Functions to handle signals for child processes
 /    and interrupts.
 /---------------------------------------------------------*/
 #include <stdio.h>
@@ -18,6 +18,7 @@
 #include "prompt.h"
 #include "stringlib.h"
 
+/*Globals for child reaping and background handling*/
 volatile sig_atomic_t child_exit = 0;
 int num_bg_jobs = 0;
 BackgroundJob bg_jobs[MAX_BG_JOBS];
@@ -75,13 +76,12 @@ void reap_children(){
                     write(STDOUT, bg_jobs[i].pid_str, string_len(bg_jobs[i].pid_str));
                     write(STDOUT, "] done.\n", 8);
 
-                    // Optionally, remove the job from the array
                     for (int j = i; j < num_bg_jobs - 1; j++) {
-                        bg_jobs[j] = bg_jobs[j + 1]; // Shift jobs left
+                        bg_jobs[j] = bg_jobs[j + 1]; 
                     }
 
-                    num_bg_jobs--; // Decrement job count
-                    break; // Exit for loop after handling this PID
+                    num_bg_jobs--;
+                    break; 
                 }
             }
         }

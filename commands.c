@@ -4,7 +4,8 @@
 /  File Name:   commands.c 
 /
 /  Program Purpose(s):
-/    TODO
+/    Fucntions for command processing, like reading user input,
+/    tokenizing input, and executing commands.
 /---------------------------------------------------------*/
 
 #include <stdio.h>
@@ -31,7 +32,7 @@
 /      - Stores an array of tokens generated from the input.
 /  
 /  CALLER OUTPUT:
-/    N/A--No return value.
+/    N/A-No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    - Assumes that the input will be less than BUFFER_SIZE.
@@ -82,10 +83,10 @@ void get_command(char *tokens[]) {
 /      - A pointer to a Command structure containing the command's arguments.
 /  
 /  CALLER OUTPUT:
-/    N/A--No return value.
+/    N/A-No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    - Deprecated: No longer used and has been replaced by routine 
+/    - Deprecated: No longer used and has been replaced by function 
 /      that supports pipelines and I/O redirection.
 /    - Assumes that command->argv is populated and terminated with NULL.
 /---------------------------------------------------------*/
@@ -128,7 +129,7 @@ void run_command(Command *command) {
 /      - The buffer containing the user input.
 /  
 /  CALLER OUTPUT:
-/    N/A--No return value.
+/    N/A-No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    - Assumes that the tokens array has enough space to store all tokens from 
@@ -139,25 +140,25 @@ void run_command(Command *command) {
 void tokenize(char *tokens[], char buffer[]) {
 
     int i = 0;
-    int token_index = 0; /*tracks the index of next token to be placed in array*/
-    char *start = 0; /*pointer for start of string being tokenized*/
+    int token_index = 0; 
+    char *start = 0; 
 
-    while (buffer[i] != '\0') { /*runs till end of buffer*/
+    while (buffer[i] != '\0') { 
 
-        if (buffer[i] != ' ' && buffer[i] != '\n') { /*checks for whitespace or carriage return*/
+        if (buffer[i] != ' ' && buffer[i] != '\n') { 
 
-            if (start == 0) { /*if start is null */
+            if (start == 0) { 
 
-                start = &buffer[i]; /*set start to point at the start of token to be copied*/
+                start = &buffer[i];
             }
         }
-        else { /*else whitespace is found*/
+        else { 
 
-            if (start != 0) { /*if start already points to a token to be copied*/
+            if (start != 0) {
 
-                buffer[i] = '\0'; /*null terminate token*/
-                tokens[token_index++] = start; /*set tokens at specified index to point at start of token*/
-                start = 0; /* ANSI_RESET start*/
+                buffer[i] = '\0';
+                tokens[token_index++] = start; 
+                start = 0;
             }
         }
 
@@ -165,12 +166,12 @@ void tokenize(char *tokens[], char buffer[]) {
 
     }
 
-    if (start != 0) { /*check to make sure all tokens were accounted for*/
+    if (start != 0) {
 
         tokens[token_index++] = start; 
 
     }
 
-    tokens[token_index] = 0; /*null terminate token array*/
+    tokens[token_index] = 0;
 
 }

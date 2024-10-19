@@ -4,9 +4,8 @@
 /  File Name:   stringlib.c
 /
 /  Program Purpose(s):
-/    This module provides basic string manipulation functions
-/    such as comparison, length calculation, copying, and 
-/    converting process IDs to strings.
+/    String functions including comparison, length, copying, 
+/    and converting process IDs to strings.
 /---------------------------------------------------------*/
 
 #include "stringlib.h"
@@ -138,4 +137,35 @@ void pid_to_string(pid_t pid, char *buffer){
         buffer[j] = buffer[i - j - 1];
         buffer[i - j - 1] = temp;
     }
+}
+
+/*---------- FUNCTION: str_comp_by_len ---------------------
+/  PURPOSE:
+/    Compares two strings up to a specified length for equality.
+/  
+/  CALLER INPUT:
+/    const char *str1
+/      First string to compare.
+/  
+/    const char *str2
+/      Second string to compare.
+/  
+/    int len
+/      Number of characters to compare.
+/  
+/  CALLER OUTPUT:
+/    Returns 0 if the strings are equal up to len; -1 if not.
+/  
+/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
+/    - Assumes both strings are null-terminated. 
+/---------------------------------------------------------*/
+int str_comp_by_len(const char *str1, const char *str2, int len){
+
+    for (int i = 0; i < len; i++) {
+        if(str1[i] != str2[i]){
+            return -1;
+        }
+    }
+
+    return 0;
 }

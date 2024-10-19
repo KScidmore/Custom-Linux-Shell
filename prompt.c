@@ -44,13 +44,6 @@ void show_prompt() {
         string_copy(hostname, "unknownhost\0");
     }
 
-    /*
-    char pwd[PATH_MAX] = {0};
-    if (getcwd(pwd, sizeof(pwd)) == NULL) {
-        string_copy(pwd, "unknown-dir\0");
-    }
-    */
-
     write(2, ANSI_MAGENTA, string_len(ANSI_MAGENTA)); 
     write(2, username, string_len(username));
     write(2, "@", 1);
@@ -59,9 +52,6 @@ void show_prompt() {
     write(2, ":", 1);
     write(2, ANSI_CYAN, string_len(ANSI_CYAN)); 
     write(2, "kash", 4);
-    /*
-    write(2, pwd, string_len(pwd));
-    */
     write(2, ANSI_RESET, string_len(ANSI_RESET)); 
     write(2, "$ ", 2);
 }

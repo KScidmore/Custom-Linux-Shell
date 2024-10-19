@@ -4,7 +4,7 @@
 /  File Name:   jobs.c
 /
 /  Program Purpose(s):
-/    Contains functions to manage job execution including 
+/    Functions to manage job execution including 
 /    initializing jobs, running them in the foreground or 
 /    background, and handling I/O redirection.
 /---------------------------------------------------------*/
@@ -35,11 +35,10 @@
 /      - A pointer to a Job struct.
 /  
 /  CALLER OUTPUT:
-/    N/A--No return value.
+/    N/A-No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    - Assumes that job is a valid pointer to a Job structure.
-/    - No known bugs or limitations.
 /---------------------------------------------------------*/
 void init_job(Job *job) {
     job->num_stages = 0;
@@ -59,7 +58,7 @@ void init_job(Job *job) {
 /      - A pointer to a Job struct.
 /  
 /  CALLER OUTPUT:
-/    N/A--No return value.
+/    N/A-No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    - Assumes that the job structure has been properly configured.
@@ -227,7 +226,7 @@ pid_t process_job(Job *job, int stage, int *pipefd){
 
         /*Process output redirection*/
         if(stage == job->num_stages - 1 && job->outfile_path != NULL){
-            output_fd = open(job->outfile_path, O_WRONLY | O_CREAT | O_TRUNC);
+            output_fd = open(job->outfile_path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 
             if(output_fd < 0){
 

@@ -4,7 +4,7 @@
 /  File Name:   memory.c
 /
 /  Program Purpose(s):
-/    Contains memory allocation functions for managing a 
+/    Memory allocation functions for managing a 
 /    fixed-size heap.
 /---------------------------------------------------------*/
 

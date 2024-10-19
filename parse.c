@@ -4,9 +4,8 @@
 /  File Name:   parse.c
 /
 /  Program Purpose(s):
-/    Contains functions to parse user input and break it
-/    into commands which are placed into the job struct 
-/    to be ran in the shell.
+/    Functions to parse user input and break it into commands 
+/    which are placed into the job struct to be ran in the shell.
 /---------------------------------------------------------*/
 
 #include <sys/types.h>
@@ -30,7 +29,7 @@
 /      - A pointer to a Job struct.
 /  
 /  CALLER OUTPUT:
-/    N/A--No return value.
+/    N/A-No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    - Assumes that the tokens array is properly formatted and null-terminated.
@@ -82,7 +81,7 @@ void parse_command(Command *command, char *tokens[], Job *job){
 /      - An array of strings that contains the tokenized input from the user.
 /  
 /  CALLER OUTPUT:
-/    N/A--No return value.
+/    N/A-No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    - Assumes that the tokens array is properly formatted and 
@@ -119,14 +118,14 @@ void parse_pipeline(Job *job, char *tokens[]){
 /*---------- FUNCTION: parse_job ---------------------------
 /  PURPOSE:
 /    Parses a job by getting a command from user input and 
-/    then buildis the pipeline of commands based on the input.
+/    then builds the pipeline of commands based on the input.
 /  
 /  CALLER INPUT:
 /    Job *job
 /      - A pointer to a Job struct.
 /  
 /  CALLER OUTPUT:
-/    N/A--No return value.
+/    N/A-No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    - Assumes that the job struct is properly initialized.

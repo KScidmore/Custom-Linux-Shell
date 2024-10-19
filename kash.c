@@ -9,8 +9,6 @@
 /    for background processes.
 /---------------------------------------------------------*/
 
-/* includes (<> then "") */
-
 
 #include <stdio.h>
 #include <sys/types.h>

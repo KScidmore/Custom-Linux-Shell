@@ -27,7 +27,6 @@
 typedef struct {
     char *argv[MAX_ARGS+1];
     unsigned int argc;
-    /* it is noted that we may need to add more here, later */
 } Command;
 
 void get_command(char *tokens[]);
