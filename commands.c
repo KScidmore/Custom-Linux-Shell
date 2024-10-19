@@ -12,16 +12,19 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <signal.h>
+#include <stdlib.h>
 #include "errorcodes.h"
 #include "commands.h"
 #include "memory.h"
 #include "prompt.h"
 #include "signals.h"
+#include "globals.h"
+#include "stringlib.h"
 
 /*---------- FUNCTION: get_command -------------------------
 /  PURPOSE:
 /    Reads a command from standard input, processes it, and 
-/    stores the tokenized input into the provided array.
+/    stores the tokenized input into an array.
 /  
 /  CALLER INPUT:
 /    char *tokens[]
@@ -43,11 +46,11 @@ void get_command(char *tokens[]) {
 
     p_buffer = alloc(BUFFER_SIZE);
     if (p_buffer == NULL) {
-        write(1, ERROR_MEMORY, sizeof(ERROR_MEMORY) - 1);
+        write(STDERR, ERROR_MEMORY, string_len(ERROR_MEMORY));
         return;
     }
 
-    bytes_read = read(0, p_buffer, BUFFER_SIZE - 1);
+    bytes_read = read(STDIN, p_buffer, BUFFER_SIZE - 1);
 
     if (bytes_read > 0) {
         p_buffer[bytes_read] = '\0'; /* same as *(p_buffer + bytes_read) */
@@ -59,7 +62,7 @@ void get_command(char *tokens[]) {
 
     }
     else {
-        write(2, ERROR_READ, sizeof(ERROR_READ) - 1);
+        write(STDERR, ERROR_READ, string_len(ERROR_READ));
         return;
     }
     
@@ -96,12 +99,18 @@ void run_command(Command *command) {
 
     if (pid == 0) {
         if (execve(command->argv[0] , command->argv , newenvp) == -1) {
-            write(2, ERROR_INVALID_COMMAND, sizeof(ERROR_INVALID_COMMAND) - 1);
+            write(STDERR, ERROR_INVALID_COMMAND, string_len(ERROR_INVALID_COMMAND));
             _exit(1); /* make sure child exits if error */
         }
     }
     else {
-        waitpid(pid, &status, 0);
+
+        if(waitpid(pid, &status, 0) == -1){
+
+            write(STDERR, ERROR_WAIT_FAILED, string_len(ERROR_WAIT_FAILED));
+            exit(1); 
+
+        }
     }
 
 }

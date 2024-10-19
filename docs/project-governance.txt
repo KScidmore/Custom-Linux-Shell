@@ -2,7 +2,7 @@
 ==========
 - overall:
     - want to complete project 
-    - targeting an A 
+    - targeting an A- 
     - responsible for regular communication and efforts towards the project 
 - policy: 
     - meet roughly weekly, communicate every 1-2 days, conduct ourselves as we did during 2659 

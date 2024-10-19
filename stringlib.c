@@ -4,63 +4,6 @@
 /  File Name:   stringlib.c
 /
 /  Program Purpose(s):
-/    Basic string functions including comparison, length, 
-/    copying, and converting PIDs to strings.
-/---------------------------------------------------------*/
-
-#include "stringlib.h"
-#include <sys/types.h>
-
-/*---------- FUNCTION: string_comp ------------------------- 
-/  PURPOSE:
-/    Compares two strings for equality. Returns 0 if equal, 
-/    -1 if not.
-/  
-/  CALLER INPUT:
-/    const char *str1
-/      Pointer to the first string to be compared.
-/    const char *str2
-/      Pointer to the second string to be compared.
-/  
-/  CALLER OUTPUT:
-/    Returns 0 if both strings are equal; otherwise, 
-/    returns -1.
-/  
-/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    - Both input strings should be null-terminated. 
-/---------------------------------------------------------*/
-int string_comp(const char *str1, const char *str2){
-
-    while(*str1 && *str2){
-
-        if(*str1 != *str2){
-
-            return -1;
-        }
-        str1++;
-        str2++;
-    }
-    if(*str1 != *str2){
-
-        return -1;
-    }
-
-    return 0;
-    
-}
-
-
-
-Here’s a detailed documentation for the stringlib.c file, including the ID header and documentation blocks for the functions:
-
-c
-Copy code
-/*---------- ID HEADER -------------------------------------
-/  Author(s):   Andrew Boisvert, Kyle Scidmore
-/  Email(s):    abois526@mtroyal.ca, kscid125@mtroyal.ca
-/  File Name:   stringlib.c
-/
-/  Program Purpose(s):
 /    This module provides basic string manipulation functions
 /    such as comparison, length calculation, copying, and 
 /    converting process IDs to strings.

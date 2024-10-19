@@ -40,7 +40,7 @@ void show_prompt() {
     }
 
     char hostname[HOST_MAX] = {0};
-    if (gethostname(hostname, string_len(hostname)) == -1) {
+    if (gethostname(hostname, HOST_MAX) == -1) {
         string_copy(hostname, "unknownhost\0");
     }
 
@@ -51,17 +51,17 @@ void show_prompt() {
     }
     */
 
-    write(2, ANSI_MAGENTA, string_len(ANSI_MAGENTA) - 1); 
+    write(2, ANSI_MAGENTA, string_len(ANSI_MAGENTA)); 
     write(2, username, string_len(username));
     write(2, "@", 1);
     write(2, hostname, string_len(hostname));
-    write(2, ANSI_RESET, string_len(ANSI_RESET) - 1); 
+    write(2, ANSI_RESET, string_len(ANSI_RESET)); 
     write(2, ":", 1);
-    write(2, ANSI_CYAN, string_len(ANSI_CYAN) - 1); 
+    write(2, ANSI_CYAN, string_len(ANSI_CYAN)); 
     write(2, "kash", 4);
     /*
     write(2, pwd, string_len(pwd));
     */
-    write(2, ANSI_RESET, string_len(ANSI_RESET) - 1); 
+    write(2, ANSI_RESET, string_len(ANSI_RESET)); 
     write(2, "$ ", 2);
 }

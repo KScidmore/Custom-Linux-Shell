@@ -49,12 +49,13 @@ int main() {
 
     while (1) {
 
+        reap_children();
         show_prompt();
         init_job(&job);
         parse_job(&job);
         
         if (job.pipeline[0].argv[0] == NULL) {
-            write(STDOUT, ERROR_NO_COMMAND, string_len(ERROR_NO_COMMAND));
+            write(STDOUT, "", 1);
             init_job(&job);
             continue;
         }

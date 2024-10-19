@@ -10,6 +10,7 @@
 /---------------------------------------------------------*/
 
 #include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -68,9 +69,9 @@ void run_job(Job *job){
     int stage;
     int status;
     pid_t pids[job->num_stages];
-    char pid_str[32];
     int pipefd[2 * (job->num_stages - 1)];
 
+    /*Create pipes based on number of stages*/
     for (stage = 0; stage < job->num_stages - 1; stage++){
         if (pipe(pipefd + stage * 2) == -1) {
 
@@ -80,34 +81,61 @@ void run_job(Job *job){
         }
     }
 
+    /*Calls process_job to fork each stages child*/
     for(stage = 0; stage < job->num_stages; stage++){
 
         pids[stage] = process_job(job, stage, pipefd);
 
     }
 
+    /*Close parents unused pipe ends*/
     for (stage = 0; stage < job->num_stages - 1; stage++) {
-        close(pipefd[stage * 2]);     
-        close(pipefd[stage * 2 + 1]); 
+
+        /*Close read end*/
+        if (close(pipefd[stage * 2]) == -1) {
+
+            write(STDERR, ERROR_CLOSE_FAILED, string_len(ERROR_CLOSE_FAILED));
+            exit(1);
+
+        }
+        /*Close write end*/
+        if (close(pipefd[stage * 2 + 1]) == -1) {
+
+            write(STDERR, ERROR_CLOSE_FAILED, string_len(ERROR_CLOSE_FAILED));
+            exit(1);
+
+        }
     }
 
-    if(!job->background){
+    /*Wait for child to complete if foreground*/
+    if(job->background == 0){
 
         for(stage = 0; stage < job->num_stages; stage++){
-            waitpid(pids[stage], &status, 0);
-    
+
+            if(waitpid(pids[stage], &status, 0) == -1){
+
+                write(STDERR, ERROR_WAIT_FAILED, string_len(ERROR_WAIT_FAILED));
+                exit(1);
+
+            }
         }
+    }else{ /*Notify user of background job*/
 
-    }else{
-        write(STDOUT, "Background job PID: ", 21);
+        if (num_bg_jobs < MAX_BG_JOBS) {
+            bg_jobs[num_bg_jobs].pid = pids[0];
+            pid_to_string(bg_jobs[num_bg_jobs].pid, bg_jobs[num_bg_jobs].pid_str);
+            bg_jobs[num_bg_jobs].job_num = num_bg_jobs + 1;
+            num_bg_jobs++;
 
-        pid_to_string(pids[0], pid_str);
-        pid_str[string_len(pid_str)] = '\n';
-
-        write(STDOUT, pid_str, string_len(pid_str));
+            write(STDOUT, "Background job [", 17);
+            write(STDOUT, bg_jobs[num_bg_jobs - 1].pid_str, string_len(bg_jobs[num_bg_jobs - 1].pid_str));
+            write(STDOUT, "] started.\n", 11);
+        }
+        else{
+            write(STDERR, "Maximum background jobs reached.\n", 34);
+        }
     }
     
-    signal(SIGINT, interrupt_block); 
 }
 
 /*---------- FUNCTION: process_job -------------------------
@@ -142,26 +170,58 @@ pid_t process_job(Job *job, int stage, int *pipefd){
     int output_fd = -1;
     int i;
 
+    /*Fork a new process*/
     pid = fork();
 
-    if(pid == 0){ /*Child starts here*/
+    if (pid == -1) {
 
-        signal(SIGINT, SIG_DFL);
+        write(STDERR, ERROR_FORK_FAILED, string_len(ERROR_FORK_FAILED));
+        exit(1);
+
+    }
+    
+    /*Child starts here*/
+    if(pid == 0){ 
+
+        /*Allow child to be interrupted*/
+        if (signal(SIGINT, SIG_DFL) == SIG_ERR) {
+
+            write(STDERR, ERROR_SIGNAL_FAILED, string_len(ERROR_SIGNAL_FAILED));
+            exit(1);
+
+        }
 
         /*Process input redirection*/
         if (stage == 0 && job->infile_path != NULL){
             input_fd = open(job->infile_path, O_RDONLY);
 
             if(input_fd < 0){
+
                 write(STDERR, ERROR_OPEN_FILE, string_len(ERROR_OPEN_FILE));
                 _exit(1);
+                
             }
-            dup2(input_fd, STDIN);
-            close(input_fd);
+            if (dup2(input_fd, STDIN) == -1) {
+
+                write(STDERR, ERROR_DUP2_FAILED, string_len(ERROR_DUP2_FAILED));
+                _exit(1);
+
+            }
+            if(close(input_fd) == -1){
+
+                write(STDERR, ERROR_CLOSE_FAILED, string_len(ERROR_CLOSE_FAILED));
+                _exit(1);
+
+            }
 
         }else if(stage > 0){
 
-            dup2(pipefd[(stage - 1) * 2], STDIN);
+            if(dup2(pipefd[(stage - 1) * 2], STDIN) == -1){
+
+                write(STDERR, ERROR_DUP2_FAILED, string_len(ERROR_DUP2_FAILED));
+                _exit(1);
+
+            }
 
         }
 
@@ -170,24 +230,52 @@ pid_t process_job(Job *job, int stage, int *pipefd){
             output_fd = open(job->outfile_path, O_WRONLY | O_CREAT | O_TRUNC);
 
             if(output_fd < 0){
+
                 write(STDERR, ERROR_OPEN_FILE, string_len(ERROR_OPEN_FILE));
                 _exit(1);
+
             }
-            dup2(output_fd, STDOUT);
-            close(output_fd);
+
+            if(dup2(output_fd, STDOUT) == -1){
+
+                write(STDERR, ERROR_DUP2_FAILED, string_len(ERROR_DUP2_FAILED));
+                _exit(1); 
+
+            }
+            if(close(output_fd) == -1){
+                
+                write(STDERR, ERROR_CLOSE_FAILED, string_len(ERROR_CLOSE_FAILED));
+                _exit(1);
+
+            }
         }else if(stage < job->num_stages - 1){
 
-            dup2(pipefd[stage * 2 + 1], STDOUT);
+            if(dup2(pipefd[stage * 2 + 1], STDOUT) == -1){
+
+                write(STDERR, ERROR_DUP2_FAILED, string_len(ERROR_DUP2_FAILED));
+                _exit(1);
+
+            }
 
         }
 
+        /*Close childs file descriptors*/
         for (i = 0; i < (job->num_stages -1) * 2; i++){
-            close(pipefd[i]);
+            
+            if(close(pipefd[i]) == -1){
+                
+                write(STDERR, ERROR_CLOSE_FAILED, string_len(ERROR_CLOSE_FAILED));
+                exit(1);
+
+            }
         }
 
+        /*Execute current stages command*/
         if(execve(job->pipeline[stage].argv[0], job->pipeline[stage].argv, NULL) == -1){
+
             write(STDERR, ERROR_EXECVE, string_len(ERROR_EXECVE));
             _exit(1);
+
         }
 
     }else if(pid > 0){ /*Parent starts here*/
@@ -195,7 +283,5 @@ pid_t process_job(Job *job, int stage, int *pipefd){
         return pid;
 
     } 
-    write(STDERR, ERROR_FORK_FAILED, string_len(ERROR_FORK_FAILED));
-    exit(1);
 
 }

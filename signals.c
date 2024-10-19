@@ -16,36 +16,77 @@
 #include "signals.h"
 #include "globals.h"
 #include "prompt.h"
+#include "stringlib.h"
+
+volatile sig_atomic_t child_exit = 0;
+int num_bg_jobs = 0;
+BackgroundJob bg_jobs[MAX_BG_JOBS];
 
 /*---------- FUNCTION: child_signal ------------------------
 /  PURPOSE:
-/    Handles the SIGCHLD signal. This function reaps child 
-/    processes that have exited to prevent zombie processes.
+/    Handles SIGCHLD signal. Sets a flag to indicate
+/    that a child processes has exited, and needs cleanup.
 /  
 /  CALLER INPUT:
 /    int sig
-/      The signal number received.
+/      The signal number.
 /  
 /  CALLER OUTPUT:
-/    N/A--No return value.
+/    N/A-No return value.
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
-/    - Does not provide feedback on the status of terminated 
-/      child processes, which may limit debugging capabilities.
-/      (Having prompt issues with output may add later)
+/    - Only sets a flag. Does not immediately reap child 
+/      processes do to reaping processes to fast for parent.
 /---------------------------------------------------------*/
 void child_signal(int sig){
 
-    int old_errno = errno;
+    child_exit = 1;
+
+}
+/*---------- FUNCTION: reap_children -----------------------
+/  PURPOSE:
+/    Reaps child processes that have exited, preventing 
+/    zombie processes.
+/  
+/  CALLER INPUT:
+/    N/A
+/  
+/  CALLER OUTPUT:
+/    N/A-No return value.
+/  
+/  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
+/   N/A
+/---------------------------------------------------------*/
+void reap_children(){
+
     pid_t pid;
-    int status;
-    int exit_status;
+    int status, i;
+    char pid_str[32];
 
-    while((pid = waitpid(-1, &status, WNOHANG)) > 0){
+    if (child_exit) {
+        
+        while ((pid = waitpid(-1, &status, WNOHANG)) > 0) {
 
+            for (i = 0; i < num_bg_jobs; i++) {
 
+                if (bg_jobs[i].pid == pid) {
+
+                    write(STDOUT, "[", 1);
+                    write(STDOUT, bg_jobs[i].pid_str, string_len(bg_jobs[i].pid_str));
+                    write(STDOUT, "] done.\n", 8);
+
+                    // Optionally, remove the job from the array
+                    for (int j = i; j < num_bg_jobs - 1; j++) {
+                        bg_jobs[j] = bg_jobs[j + 1]; // Shift jobs left
+                    }
+
+                    num_bg_jobs--; // Decrement job count
+                    break; // Exit for loop after handling this PID
+                }
+            }
+        }
+        child_exit = 0;
     }
-    errno = old_errno;
 }
 
 /*---------- FUNCTION: interrupt_block --------------------- 
