@@ -8,7 +8,7 @@
 /---------------------------------------------------------*/
 
 #include "stringlib.h"
-#include <sys/types.h>
+
 
 /*---------- FUNCTION: string_comp -------------------------
 /  PURPOSE:

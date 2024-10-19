@@ -13,6 +13,12 @@
 #include "commands.h"
 #include "globals.h"
 #include "stringlib.h"
+#include "search.h"
+#include "memory.h"
+
+/* delete later, for debugging */
+#include <stdio.h>
+#include <string.h>
 
 /*---------- FUNCTION: parse_command -----------------------
 /  PURPOSE:
@@ -124,11 +130,36 @@ void parse_pipeline(Job *job, char *tokens[]){
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    TODO - N/A or list them 
 /---------------------------------------------------------*/
-void parse_job(Job *job){
-
+void parse_job(Job *job, char *envp[]){
+    int i = 0;
+    char path[MAX_PATH_LEN];
     char *tokens[MAX_ARGS];
+    char *full_tokens[MAX_ARGS];
+
 
     get_command(tokens);
+
+    for (i = 0; tokens[i] != NULL; i++) {
+        if (tokens[i][0] != '-' &&
+            tokens[i][0] != '|' &&
+            tokens[i][0] != '<' &&
+            tokens[i][0] != '>') {
+            
+            if (check_for_file(tokens[i], path, envp) == 0) { 
+                /*
+                string_copy(path, full_tokens[i]);
+                */
+                if (tokens[0] != NULL) {
+                    printf("tokens[0] is *NOT* NULL\n\r");
+                    strncpy(tokens[i], path, MAX_PATH_LEN - 1);
+                } else {
+                    printf("tokens[0] is NULL\n\r");
+                }
+            } 
+        } else {
+            
+        }
+    }
 
     if (tokens[0] == NULL || tokens[0][0] == '\0'){
         return;

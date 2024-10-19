@@ -38,18 +38,18 @@
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    TODO - N/A or list them 
 /---------------------------------------------------------*/
-int main() {
+int main(int argc, char *argv[], char *envp[]) {
 
     Job job;
 
     signal(SIGINT, interrupt_block);
-    signal(SIGCHLD, child_signal);
+    /*signal(SIGCHLD, child_signal);*/
 
     while (1) {
 
         show_prompt();
         init_job(&job);
-        parse_job(&job);
+        parse_job(&job, envp);
         
         if (job.pipeline[0].argv[0] == NULL) {
             write(STDOUT, ERROR_NO_COMMAND, string_len(ERROR_NO_COMMAND));

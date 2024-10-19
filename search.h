@@ -10,14 +10,10 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
-#define MAX_PATH_LENGTH 4096
+#define MAX_PATH_LEN 4096
 
-/* delete these later*/
-int str_comp_by_len(const char *str1, const char *str2, int len); 
-
-/* not these */
-char *get_path(char **path, char *envp[]);
+int get_path(char *path, char *envp[]);
 int check_for_file(char *command, char *full_path, char *envp[]);
-void test_check_for_file(char *fullpath, char *envp[]);
+void test(char *envp[]);
 
 #endif

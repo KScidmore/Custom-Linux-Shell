@@ -11,6 +11,11 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include "stringlib.h"
+#include "search.h"
+
+#include <stdio.h>
+
+
 
 /*---------- FUNCTION: get_path ----------------------------
 /  PURPOSE:
@@ -25,17 +30,19 @@
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    TODO - N/A or list them 
 /---------------------------------------------------------*/
-char *get_path(char **path, char *envp[]) {
+int get_path(char *path, char *envp[]) {
     int i = 0;
 
     for (i = 0; envp[i] != NULL; i++) {
         if (str_comp_by_len(envp[i], "PATH=", 5) == 0) {
-            return *path = envp[i] + 5;
+            string_copy((envp[i] + 5), path);
+            return 0;
         }
     }
 
-    return *path = NULL; /* not found */
+    return 1; /* not found */
 }
+
 
 /*---------- FUNCTION: check_for_file ----------------------
 /  PURPOSE:
@@ -53,12 +60,12 @@ char *get_path(char **path, char *envp[]) {
 int check_for_file(char *command, char *full_path, char *envp[]) {
     struct stat sb;
     int path_index = 0;
-    char *path;
+    char path[MAX_PATH_LEN];
     int i = 0;
     int j = 0;
 
-    if (get_path(&path, envp) == NULL) {
-        path = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games";
+    if (get_path(path, envp) != 0) {
+        string_copy("/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games", path);
     } /* assigns path and sets default if "PATH" not in envp */
 
     while (path[i] != '\0') {
@@ -75,14 +82,16 @@ int check_for_file(char *command, char *full_path, char *envp[]) {
         while (command[j] != '\0') {
             full_path[path_index++] = command[j++];
         } /* appending the command to full_path */
-
+        
         full_path[path_index] = '\0';
 
         if (stat(full_path, &sb) == 0) {
             return 0; /* file found */
         }
 
-        i += 1; /* skip over the ':' delimiter before restarting loop */
+        if (path[i] == ':') {
+            i += 1; /* skip over the ':' delimiter before restarting loop */
+        }
 
     } /* null terminator reached */
 
@@ -90,12 +99,29 @@ int check_for_file(char *command, char *full_path, char *envp[]) {
 }
 
 
-/*
+void test(char *envp[]) {
 
-if (check_for_file("ls", full_path, envp) == 0) {
-    printf("file found: %s\n", full_path);
-} else if (check_for_file("ls", full_path, envp) == -1) {
-    printf("file not found\n");
+    char full_path[MAX_PATH_LEN];
+
+    if (check_for_file("ls", full_path, envp) == 0) {
+        printf("file found: %s\n", full_path);
+    } else if (check_for_file("ls", full_path, envp) == -1) {
+        printf("file not found\n");
+    }
+    if (check_for_file("grep", full_path, envp) == 0) {
+        printf("file found: %s\n", full_path);
+    } else if (check_for_file("ls", full_path, envp) == -1) {
+        printf("file not found\n");
+    }
+    if (check_for_file("awk", full_path, envp) == 0) {
+        printf("file found: %s\n", full_path);
+    } else if (check_for_file("ls", full_path, envp) == -1) {
+        printf("file not found\n");
+    }
+    if (check_for_file("sed", full_path, envp) == 0) {
+        printf("file found: %s\n", full_path);
+    } else if (check_for_file("ls", full_path, envp) == -1) {
+        printf("file not found\n");
+    }
+
 }
-
-*/

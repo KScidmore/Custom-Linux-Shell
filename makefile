@@ -11,7 +11,7 @@
 #--------- Variable declarations ---------------------------
 # Targets and objects
 TARGET=kash
-OBJECTS=signals.o parse.o stringlib.o prompt.o memory.o jobs.o commands.o kash.o
+OBJECTS=search.o signals.o parse.o stringlib.o prompt.o memory.o jobs.o commands.o kash.o
 
 # CC stuff
 CC=gcc
@@ -32,19 +32,19 @@ clean:
 
 
 #--------- Creating Object Files --------------------------- 
-kash.o: kash.c commands.h jobs.h memory.h prompt.h stringlib.h parse.h signals.h globals.h errorcodes.h
+kash.o: kash.c commands.h jobs.h memory.h prompt.h stringlib.h parse.h signals.h globals.h errorcodes.h 
 	$(CC) $(CFLAGS) -c kash.c 
 
 commands.o: commands.c commands.h errorcodes.h memory.h prompt.h
 	$(CC) $(CFLAGS) -c commands.c 
 
-jobs.o: jobs.c jobs.h globals.h errorcodes.h stringlib.h
+jobs.o: jobs.c jobs.h globals.h errorcodes.h stringlib.h 
 	$(CC) $(CFLAGS) -c jobs.c 
 
 memory.o: memory.c memory.h
 	$(CC) $(CFLAGS) -c memory.c 
 
-parse.o: parse.c parse.h jobs.h commands.h globals.h stringlib.h
+parse.o: parse.c parse.h jobs.h commands.h globals.h stringlib.h search.h memory.h
 	$(CC) $(CFLAGS) -c parse.c
 
 prompt.o: prompt.c prompt.h stringlib.h
@@ -53,6 +53,10 @@ prompt.o: prompt.c prompt.h stringlib.h
 stringlib.o: stringlib.c stringlib.h 
 	$(CC) $(CFLAGS) -c stringlib.c
 
-signals.o: signals.c signals.h 
+signals.o: signals.c signals.h globals.h prompt.h 
 	$(CC) $(CFLAGS) -c signals.c
+
+search.o: search.h stringlib.h
+	$(CC) $(CFLAGS) -c search.c
+
 # The empty line above this comment must remain to avoid errors

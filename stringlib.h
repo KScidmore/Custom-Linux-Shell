@@ -6,9 +6,11 @@
 /  Program Purpose(s):
 /    User-defined header file for stringlib.c. 
 /---------------------------------------------------------*/
-#include <sys/types.h>
+
 #ifndef STRINGLIB_H
 #define STRINGLIB_H
+
+#include <sys/types.h>
 
 int string_comp(const char *str1, const char *str2);
 int string_len(const char *str);

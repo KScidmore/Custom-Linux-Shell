@@ -12,6 +12,6 @@
 
 void parse_command(Command *command, char *tokens[], Job *job);
 void parse_pipeline(Job *job, char *tokens[]);
-void parse_job(Job *job);
+void parse_job(Job *job, char *envp[]);
 
 #endif
