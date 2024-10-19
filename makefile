@@ -10,8 +10,8 @@
 
 #--------- Variable declarations ---------------------------
 # Targets and objects
-TARGET=kash
-OBJECTS=signals.o parse.o stringlib.o prompt.o memory.o jobs.o commands.o kash.o
+TARGET=mysh
+OBJECTS=signals.o parse.o stringlib.o prompt.o memory.o jobs.o commands.o mysh.o
 
 # CC stuff
 CC=gcc
@@ -32,8 +32,8 @@ clean:
 
 
 #--------- Creating Object Files --------------------------- 
-kash.o: kash.c commands.h jobs.h memory.h prompt.h stringlib.h parse.h signals.h globals.h errorcodes.h
-	$(CC) $(CFLAGS) -c kash.c 
+mysh.o: mysh.c commands.h jobs.h memory.h prompt.h stringlib.h parse.h signals.h globals.h errorcodes.h
+	$(CC) $(CFLAGS) -c mysh.c 
 
 commands.o: commands.c commands.h errorcodes.h memory.h prompt.h
 	$(CC) $(CFLAGS) -c commands.c 
