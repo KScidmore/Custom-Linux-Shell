@@ -22,9 +22,6 @@
 /  
 /  ASSUMPTIONS, LIMITATIONS, AND KNOWN BUGS:
 /    TODO - N/A or list them 
-/
-/  CITATIONS:
-/    TODO - N/A or list them
 /---------------------------------------------------------*/
 
 
